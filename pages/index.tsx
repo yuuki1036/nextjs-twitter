@@ -7,11 +7,11 @@ import Image from "next/image";
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <div className="mx-auto lg:max-w-6xl max-h-screen overflow-hidden">
       <Head>
-        <title>Create Next App</title>
+        <title>HITOKOTO</title>
       </Head>
-      <main>
+      <main className="grid grid-cols-9">
         <Sidebar />
         <Feed />
         <Widgets />

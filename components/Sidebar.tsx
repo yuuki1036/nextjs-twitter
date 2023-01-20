@@ -10,11 +10,19 @@ import {
   UserIcon,
   EllipsisHorizontalCircleIcon,
 } from "@heroicons/react/24/outline";
+import Image from "next/image";
+import logo from "public/logo.svg";
 
 const Sidebar = () => {
   return (
-    <div className="flex flex-col">
-      <img className="h-10 w-10" src="https://links.papareact.com/drq" />
+    <div className="col-span-2 flex flex-col items-center px-4 md:items-start">
+      <Image
+        alt="Hitokoto"
+        src={logo}
+        width={40}
+        height={40}
+        className="w-10 h-10 p-[0.35rem] m-3"
+      />
       <SidebarRow Icon={HomeIcon} title="Home" />
       <SidebarRow Icon={HashtagIcon} title="Explore" />
       <SidebarRow Icon={BellIcon} title="Notifications" />
