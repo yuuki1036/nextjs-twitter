@@ -1,7 +1,7 @@
 import Feed from "components/Feed";
 import Sidebar from "components/Sidebar";
 import Widgets from "components/Widgets";
-import type { NextPage } from "next";
+import type { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 
@@ -21,3 +21,12 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getServerSideProps:GetServerSideProps = async (context) => {
+  const tweet = await 
+  return (
+    props:{
+
+    }
+  )
+}
