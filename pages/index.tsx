@@ -5,6 +5,7 @@ import Feed from "components/Feed";
 import Widgets from "components/Widgets";
 import { fetchTweets } from "utils/fetchTweets";
 import { TTweet } from "type";
+import { Toaster } from "react-hot-toast";
 
 type Props = {
   tweets: TTweet[];
@@ -16,6 +17,7 @@ const Home: NextPage<Props> = ({ tweets }) => {
       <Head>
         <title>HITOKOTO</title>
       </Head>
+      <Toaster />
       <main className="grid grid-cols-9">
         <Sidebar />
         <Feed tweets={tweets} />
