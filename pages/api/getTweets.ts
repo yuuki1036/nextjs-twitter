@@ -19,6 +19,5 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const tweets: TTweet[] = await client.fetch(feedQuery);
-  console.log(tweets);
   res.status(200).json({ tweets });
 }

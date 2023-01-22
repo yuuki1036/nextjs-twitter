@@ -9,7 +9,7 @@ export interface TTweet extends TTweetBody {
 
 export type TTweetBody = {
   text: string;
-  usename: string;
+  username: string;
   profileImg: string;
   image: string;
 };

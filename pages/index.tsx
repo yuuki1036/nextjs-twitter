@@ -11,7 +11,6 @@ type Props = {
 };
 
 const Home: NextPage<Props> = ({ tweets }) => {
-  console.log(tweets);
   return (
     <div className="mx-auto lg:max-w-6xl max-h-screen overflow-hidden">
       <Head>
@@ -19,7 +18,7 @@ const Home: NextPage<Props> = ({ tweets }) => {
       </Head>
       <main className="grid grid-cols-9">
         <Sidebar />
-        <Feed />
+        <Feed tweets={tweets} />
         <Widgets />
       </main>
     </div>
