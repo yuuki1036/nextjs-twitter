@@ -69,10 +69,13 @@ const TweetBox = ({ setTweets }: Props) => {
 
   return (
     <div className="flex space-x-2 p-5">
-      <img
-        className="mt-4 w-14 h-14 rounded-full object-cover"
-        src={session?.user?.image || "unknown-user.jpg"}
-      />
+      <picture>
+        <img
+          className="mt-4 w-14 h-14 rounded-full object-cover"
+          src={session?.user?.image || "unknown-user.jpg"}
+          alt={session?.user?.name || "Unknown User"}
+        />
+      </picture>
       <div className="flex flex-1 items-center pl-2">
         <div className="flex flex-1 flex-col">
           <form>
@@ -124,10 +127,13 @@ const TweetBox = ({ setTweets }: Props) => {
           )}
 
           {image && (
-            <img
-              className="mt-10 h-40 w-full rounded-xl object-contain shadow-lg"
-              src={image}
-            />
+            <picture>
+              <img
+                className="mt-10 h-40 w-full rounded-xl object-contain shadow-lg"
+                src={image}
+                alt="added image"
+              />
+            </picture>
           )}
         </div>
       </div>

@@ -63,11 +63,13 @@ const Tweet = ({ tweet }: Props) => {
   return (
     <div className="flex flex-col space-x-3 border-y border-gray-100 p-5">
       <div className="flex space-x-3">
-        <img
-          className="w-10 h-10 rounded-full"
-          src={tweet.profileImg}
-          alt={tweet.username}
-        />
+        <picture>
+          <img
+            className="w-10 h-10 rounded-full"
+            src={tweet.profileImg}
+            alt={tweet.username}
+          />
+        </picture>
 
         <div>
           <div className="flex items-center space-x-1">
@@ -85,11 +87,13 @@ const Tweet = ({ tweet }: Props) => {
           <p>{tweet.text}</p>
 
           {tweet.image && (
-            <img
-              className="m-5 ml-0 mb-1 max-h-60 rounded-lg object-cover shadow-sm"
-              src={tweet.image}
-              alt="tweet image"
-            />
+            <picture>
+              <img
+                className="m-5 ml-0 mb-1 max-h-60 rounded-lg object-cover shadow-sm"
+                src={tweet.image}
+                alt="tweet image"
+              />
+            </picture>
           )}
         </div>
       </div>
@@ -137,11 +141,13 @@ const Tweet = ({ tweet }: Props) => {
           {comments.map((comment) => (
             <div key={comment._id} className=" relative flex space-x-2">
               <hr className="absolute left-5 top-10 h-8 border-x border-twitter/30" />
-              <img
-                className="mt-2 h-7 w-7 rounded-full object-cover"
-                src={comment.profileImg}
-                alt={comment.username}
-              />
+              <picture>
+                <img
+                  className="mt-2 h-7 w-7 rounded-full object-cover"
+                  src={comment.profileImg}
+                  alt={comment.username}
+                />
+              </picture>
               <div>
                 <div className="flex items-center space-x-1">
                   <p className="mr-1 font-bold">{comment.username}</p>
