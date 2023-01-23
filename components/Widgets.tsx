@@ -1,7 +1,8 @@
+import { FC } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 
-const Widgets = () => {
+const Widgets: FC = () => {
   return (
     <div className="col-span-2 px-2 mt-2 hidden lg:inline">
       <div className="flex items-center space-x-2 rounded-full bg-gray-100 p-3 ">
@@ -15,8 +16,8 @@ const Widgets = () => {
       <div className="mt-4">
         <TwitterTimelineEmbed
           sourceType="profile"
-          screenName="saurabhnemade"
-          options={{ height: 500 }}
+          screenName="twitter"
+          options={{ height: 700 }}
         />
       </div>
     </div>
