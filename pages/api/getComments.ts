@@ -18,7 +18,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  console.log("tid", req.query);
   const { tweetId } = req.query;
   const comments: TComment[] = await client.fetch(commentQuery, { tweetId });
   res.status(200).json({ comments });

@@ -1,3 +1,8 @@
+import React, { Dispatch, SetStateAction, useRef, useState } from "react";
+import { useSession } from "next-auth/react";
+import { TTweet, TTweetBody } from "type";
+import { fetchTweets } from "utils/fetchTweets";
+import { toast } from "react-hot-toast";
 import {
   CalendarIcon,
   FaceSmileIcon,
@@ -5,11 +10,6 @@ import {
   MapPinIcon,
   PhotoIcon,
 } from "@heroicons/react/24/outline";
-import { useSession } from "next-auth/react";
-import React, { Dispatch, SetStateAction, useRef, useState } from "react";
-import { toast } from "react-hot-toast";
-import { TTweet, TTweetBody } from "type";
-import { fetchTweets } from "utils/fetchTweets";
 
 type Props = {
   setTweets: Dispatch<SetStateAction<TTweet[]>>;
@@ -71,7 +71,7 @@ const TweetBox = ({ setTweets }: Props) => {
     <div className="flex space-x-2 p-5">
       <img
         className="mt-4 w-14 h-14 rounded-full object-cover"
-        src={session?.user?.image || "public/unknown-user.jpg"}
+        src={session?.user?.image || "unknown-user.jpg"}
       />
       <div className="flex flex-1 items-center pl-2">
         <div className="flex flex-1 flex-col">
