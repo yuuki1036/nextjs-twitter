@@ -4,12 +4,18 @@ import {
   MagnifyingGlassIcon,
   MapPinIcon,
   PhotoIcon,
-  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
-import { useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, useRef, useState } from "react";
+import { toast } from "react-hot-toast";
+import { TTweet, TTweetBody } from "type";
+import { fetchTweets } from "utils/fetchTweets";
 
-const TweetBox = () => {
+type Props = {
+  setTweets: Dispatch<SetStateAction<TTweet[]>>;
+};
+
+const TweetBox = ({ setTweets }: Props) => {
   const [input, setInput] = useState<string>("");
   const [image, setImage] = useState<string>("");
 
@@ -29,11 +35,43 @@ const TweetBox = () => {
     setIsImageUrlBoxOpen(false);
   };
 
+  const postTweet = async () => {
+    const tweetBody: TTweetBody = {
+      text: input,
+      username: session?.user?.name || "Unknown User",
+      profileImg: session?.user?.image || "public/unknown-user.jpg",
+      image: image,
+    };
+    const result = await fetch("/api/addTweet", {
+      body: JSON.stringify(tweetBody),
+      method: "POST",
+    });
+
+    const json = await result.json();
+
+    const newTweets = await fetchTweets();
+    setTweets(newTweets);
+
+    toast("Tweet Posted", {
+      icon: "🚀",
+    });
+    return json;
+  };
+
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    postTweet();
+
+    setInput("");
+    setImage("");
+    setIsImageUrlBoxOpen(false);
+  };
+
   return (
     <div className="flex space-x-2 p-5">
       <img
         className="mt-4 w-14 h-14 rounded-full object-cover"
-        src={session?.user?.image || "https://links.papareact.com/gll"}
+        src={session?.user?.image || "public/unknown-user.jpg"}
       />
       <div className="flex flex-1 items-center pl-2">
         <div className="flex flex-1 flex-col">
@@ -59,6 +97,7 @@ const TweetBox = () => {
                 <MapPinIcon className="h-5 w-5" />
               </div>
               <button
+                onClick={handleSubmit}
                 disabled={!input || !session}
                 className="bg-twitter px-5 py-2 font-bold text-white rounded-full disabled:opacity-40"
               >

@@ -11,13 +11,12 @@ type Props = {
 };
 
 const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
-  const [tweets, settweets] = useState<TTweet[]>(tweetsProp);
-  console.log(tweets);
+  const [tweets, setTweets] = useState<TTweet[]>(tweetsProp);
 
   const handleRefresh = async () => {
     const refeshToast = toast.loading("Refreshing...");
     const tweets = await fetchTweets();
-    settweets(tweets);
+    setTweets(tweets);
 
     toast.success("Feed updated", {
       id: refeshToast,
@@ -34,7 +33,7 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
         />
       </div>
       <div>
-        <TweetBox />
+        <TweetBox setTweets={setTweets} />
       </div>
 
       <div>
