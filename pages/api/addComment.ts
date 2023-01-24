@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { mutateEndpoint } from "lib/constants";
 import { TCommentBody } from "type";
 
 type Data = {
@@ -28,9 +29,7 @@ export default async function handler(
     ],
   };
 
-  const apiEndpoint = `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v${process.env.NEXT_PUBLIC_SANITY_API_VERSION}/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`;
-
-  const result = await fetch(apiEndpoint, {
+  const result = await fetch(mutateEndpoint, {
     headers: {
       "content-type": "application/json",
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_SANITY_API_TOKEN}`,
@@ -40,5 +39,5 @@ export default async function handler(
   });
 
   const json = await result.json();
-  res.status(200).json({ message: "Added!" });
+  res.status(200).json({ message: "complete" });
 }

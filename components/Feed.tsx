@@ -5,6 +5,7 @@ import Tweet from "./Tweet";
 import TweetBox from "./TweetBox";
 import { fetchTweets } from "utils/fetchTweets";
 import { toast } from "react-hot-toast";
+import { Flipper } from "react-flip-toolkit";
 
 type Props = {
   tweets: TTweet[];
@@ -37,9 +38,11 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
       </div>
 
       <div>
-        {tweets.map((tweet) => (
-          <Tweet key={tweet._id} tweet={tweet} />
-        ))}
+        <Flipper flipKey={tweets} spring="wobbly">
+          {tweets.map((tweet) => (
+            <Tweet key={tweet._id} tweet={tweet} setTweets={setTweets} />
+          ))}
+        </Flipper>
       </div>
     </div>
   );

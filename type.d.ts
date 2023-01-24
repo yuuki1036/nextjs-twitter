@@ -1,17 +1,31 @@
+export type TTweetBody = {
+  text: string;
+  username: string;
+  profileImg: string;
+  image: string;
+  retweeter: string;
+};
+
 export interface TTweet extends TTweetBody {
   _id: string;
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   _type: "tweet";
+  tweetType: string;
   blockTweet: boolean;
+  likes: string[];
+  retweets: string[];
 }
 
-export type TTweetBody = {
-  text: string;
-  username: string;
-  profileImg: string;
-  image: string;
+export type TTweetUpdateLikes = {
+  id: string;
+  likes: string[];
+};
+
+export type TTweetUpdateRetweets = {
+  id: string;
+  retweets: string[];
 };
 
 export interface TComment extends TCommentBody {

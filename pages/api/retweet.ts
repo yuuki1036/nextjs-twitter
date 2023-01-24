@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { mutateEndpoint } from "lib/constants";
-import { TTweetBody } from "type";
+import { TTweetUpdateRetweets } from "type";
 
 type Data = {
   message: string;
@@ -10,22 +10,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const data: TTweetBody = JSON.parse(req.body);
+  const data: TTweetUpdateRetweets = JSON.parse(req.body);
 
   const mutations = {
     mutations: [
       {
-        create: {
-          _type: "tweet",
-          tweetType: "tweet",
-          text: data.text,
-          username: data.username,
-          blockTweet: false,
-          profileImg: data.profileImg,
-          image: data.image,
-          retweeter: "",
-          likes: [],
-          retweets: [],
+        patch: {
+          id: data.id,
+          set: {
+            retweets: data.retweets,
+          },
         },
       },
     ],

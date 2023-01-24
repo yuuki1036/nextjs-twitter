@@ -12,7 +12,7 @@ import {
   EllipsisHorizontalCircleIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import logo from "public/logo.svg";
+import logo from "public/logo.png";
 
 const Sidebar = () => {
   const { data: session } = useSession();
@@ -24,7 +24,7 @@ const Sidebar = () => {
         src={logo}
         width={40}
         height={40}
-        className="w-10 h-10 p-[0.35rem] m-3"
+        className="w-11 h-11 p-[0.35rem] m-3"
       />
       <SidebarRow Icon={HomeIcon} title="Home" />
       <SidebarRow Icon={HashtagIcon} title="Explore" />

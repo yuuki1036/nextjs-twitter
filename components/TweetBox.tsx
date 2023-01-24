@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useRef, useState } from "react";
+import React, { Dispatch, FC, SetStateAction, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { TTweet, TTweetBody } from "type";
 import { fetchTweets } from "utils/fetchTweets";
@@ -15,10 +15,11 @@ type Props = {
   setTweets: Dispatch<SetStateAction<TTweet[]>>;
 };
 
-const TweetBox = ({ setTweets }: Props) => {
+const TweetBox: FC<Props> = ({ setTweets }) => {
+  // tweet input
   const [input, setInput] = useState<string>("");
+  // tweet with image
   const [image, setImage] = useState<string>("");
-
   const imageInputRef = useRef<HTMLInputElement>(null);
 
   const { data: session } = useSession();
@@ -41,13 +42,12 @@ const TweetBox = ({ setTweets }: Props) => {
       username: session?.user?.name || "Unknown User",
       profileImg: session?.user?.image || "public/unknown-user.jpg",
       image: image,
+      retweeter: "",
     };
-    const result = await fetch("/api/addTweet", {
+    await fetch("/api/addTweet", {
       body: JSON.stringify(tweetBody),
       method: "POST",
     });
-
-    const json = await result.json();
 
     const newTweets = await fetchTweets();
     setTweets(newTweets);
@@ -55,7 +55,6 @@ const TweetBox = ({ setTweets }: Props) => {
     toast("Tweet Posted", {
       icon: "🚀",
     });
-    return json;
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

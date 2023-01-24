@@ -20,12 +20,5 @@ export default defineType({
       title: 'Profile Image',
       type: 'string',
     }),
-    defineField({
-      name: 'tweet',
-      title: 'Tweet',
-      description: 'Reference the Tweet the comment is associated to:',
-      type: 'reference',
-      to: [{type: 'tweet'}],
-    }),
   ],
 })
