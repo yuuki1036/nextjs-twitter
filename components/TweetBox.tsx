@@ -10,6 +10,8 @@ import {
   MapPinIcon,
   PhotoIcon,
 } from "@heroicons/react/24/outline";
+import { GUEST_IMAGE_PATH, GUEST_NAME } from "lib/constants";
+import TextareaAutosize from "react-textarea-autosize";
 
 type Props = {
   setTweets: Dispatch<SetStateAction<TTweet[]>>;
@@ -37,29 +39,31 @@ const TweetBox: FC<Props> = ({ setTweets }) => {
   };
 
   const postTweet = async () => {
-    const tweetBody: TTweetBody = {
+    const data: TTweetBody = {
       text: input,
-      username: session?.user?.name || "Unknown User",
-      profileImg: session?.user?.image || "public/unknown-user.jpg",
+      username: session?.user?.name || GUEST_NAME,
+      profileImg: session?.user?.image || GUEST_IMAGE_PATH,
       image: image,
       retweeter: "",
     };
     await fetch("/api/addTweet", {
-      body: JSON.stringify(tweetBody),
+      body: JSON.stringify(data),
       method: "POST",
     });
-
+    // feedを更新
     const newTweets = await fetchTweets();
     setTweets(newTweets);
-
-    toast("Tweet Posted", {
-      icon: "🚀",
-    });
+    return Promise.resolve();
   };
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    postTweet();
+    const promise = postTweet();
+    toast.promise(promise, {
+      loading: <b>投稿中...</b>,
+      success: <b>ひとことしました！</b>,
+      error: <b>投稿に失敗しました...</b>,
+    });
 
     setInput("");
     setImage("");
@@ -67,60 +71,70 @@ const TweetBox: FC<Props> = ({ setTweets }) => {
   };
 
   return (
-    <div className="flex space-x-2 p-5">
+    <div className="flex px-5 py-4 space-x-1 md:space-x-2">
       <picture>
         <img
-          className="mt-4 w-14 h-14 rounded-full object-cover"
-          src={session?.user?.image || "unknown-user.jpg"}
-          alt={session?.user?.name || "Unknown User"}
+          className="w-10 h-10 rounded-full object-cover"
+          src={session?.user?.image || GUEST_IMAGE_PATH}
+          alt={session?.user?.name || GUEST_NAME}
         />
       </picture>
       <div className="flex flex-1 items-center pl-2">
         <div className="flex flex-1 flex-col">
-          <form>
-            <input
-              type="text"
+          <form onSubmit={handleSubmit}>
+            <TextareaAutosize
+              maxRows={10}
+              minRows={1}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="What's happening?"
-              className="h-24 w-full outline-none placeholder:text-xl"
+              placeholder="なにかひとことおねがいします..."
+              className="mt-2 w-full outline-none md:placeholder:text-xl scrollbar-hide"
             />
             <div className="flex items-center">
-              <div className="flex flex-1 space-x-2 text-twitter">
-                <PhotoIcon
+              <div className="flex flex-1">
+                <div
                   onClick={() => {
                     setIsImageUrlBoxOpen(!isImageUrlBoxOpen);
                   }}
-                  className="h-5 w-5 cursor-pointer transition-transform duration-150 ease-out hover:scale-150"
-                />
-                <MagnifyingGlassIcon className="h-5 w-5" />
-                <FaceSmileIcon className="h-5 w-5" />
-                <CalendarIcon className="h-5 w-5" />
-                <MapPinIcon className="h-5 w-5" />
+                  className="flex items-center w-8 h-8 rounded-full cursor-pointer transition-all duration-200 ease-out hover:bg-twitter/10"
+                >
+                  <PhotoIcon className="h-5 w-5 text-twitter mx-auto" />
+                </div>
+                <div className="flex items-center w-8 h-8">
+                  <MagnifyingGlassIcon className="h-5 w-5 mx-auto text-gray-400" />
+                </div>
+                <div className="flex items-center w-8 h-8">
+                  <FaceSmileIcon className="h-5 w-5 mx-auto text-gray-400" />
+                </div>
+                <div className="flex items-center w-8 h-8">
+                  <CalendarIcon className="h-5 w-5 mx-auto text-gray-400" />
+                </div>
+                <div className="flex items-center w-8 h-8">
+                  <MapPinIcon className="h-5 w-5 mx-auto text-gray-400" />
+                </div>
               </div>
               <button
-                onClick={handleSubmit}
-                disabled={!input || !session}
-                className="bg-twitter px-5 py-2 font-bold text-white rounded-full disabled:opacity-40"
+                disabled={!input}
+                className="bg-twitter px-[0.4rem] py-2  md:px-5 md:py-2 font-bold text-white rounded-full disabled:opacity-40"
               >
-                Tweet
+                ひとこと
               </button>
             </div>
           </form>
           {isImageUrlBoxOpen && (
-            <form className="mt-5 flex rounded-lg bg-twitter/80 py-2 px-4">
+            <form className="mt-5 flex rounded-lg bg-twitter/80 py-1 px-4">
               <input
                 type="text"
                 ref={imageInputRef}
-                placeholder="Enter Image URL..."
-                className="flex-1 bg-transparent p-2 text-white outline-none placeholder:text-white"
+                placeholder="画像のURLを入力してください"
+                className="flex-1 bg-transparent p-2 text-white text-sm md:text-base outline-none placeholder:text-white"
               />
               <button
                 type="submit"
                 onClick={addImageToTweet}
                 className="font-bold text-white"
               >
-                Add Image
+                追加
               </button>
             </form>
           )}

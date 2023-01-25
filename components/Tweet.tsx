@@ -20,6 +20,7 @@ import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
 import Likes from "./Likes";
 import Retweets from "./Retweets";
 import { Flipped } from "react-flip-toolkit";
+import { GUEST_IMAGE_PATH, GUEST_NAME } from "lib/constants";
 
 type Props = {
   tweet: TTweet;
@@ -46,8 +47,8 @@ const Tweet: FC<Props> = ({ tweet, setTweets }) => {
     e.preventDefault();
     const commentBody: TCommentBody = {
       comment: input,
-      username: session?.user?.name || "Unknown User",
-      profileImg: session?.user?.image || "public/unknown-user.jpg",
+      username: session?.user?.name || GUEST_NAME,
+      profileImg: session?.user?.image || GUEST_IMAGE_PATH,
       tweetId: tweet._id,
     };
     const result = await fetch("/api/addComment", {
@@ -67,7 +68,14 @@ const Tweet: FC<Props> = ({ tweet, setTweets }) => {
 
   return (
     <Flipped flipId={tweet._id}>
-      <div className="flex flex-col space-x-3 border-y border-gray-100 p-5">
+      <div className="flex flex-col border-y border-gray-100 px-5 py-4">
+        {tweet.tweetType === "retweet" && (
+          <div className="flex flex-row items-center mb-1 text-sm text-gray-500 font-bold">
+            <ArrowPathRoundedSquareIcon className="w-4 h-4 ml-7" />
+            <p className="ml-2">{tweet.retweeter}</p>
+            <p className="">がもうひとこと！</p>
+          </div>
+        )}
         <div className="flex space-x-3">
           <picture>
             <img
@@ -78,18 +86,13 @@ const Tweet: FC<Props> = ({ tweet, setTweets }) => {
           </picture>
 
           <div>
-            {tweet.tweetType === "retweet" && (
-              <div className="flex flex-row items-center space-x-2 text-gray-500">
-                <ArrowPathRoundedSquareIcon className="w-5 h-5 " />
-                <p className="">{tweet.retweeter}</p>
-                <p className="">もうひとこと</p>
-              </div>
-            )}
             <div className="flex items-center space-x-1">
               <p className="mr-1 font-bold">{tweet.username}</p>
-              <p className="hidden text-sm text-gray-500 sm:inline">
-                @{tweet.username.replace(/\s+/g, "").toLowerCase()}
-              </p>
+              {tweet.username !== GUEST_NAME && (
+                <p className="hidden text-sm text-gray-500 sm:inline">
+                  @{tweet.username.replace(/\s+/g, "").toLowerCase()}
+                </p>
+              )}
 
               <ReactTimeago
                 className="text-sm text-gray-500"
@@ -120,7 +123,7 @@ const Tweet: FC<Props> = ({ tweet, setTweets }) => {
             <p>{comments.length}</p>
           </div>
           <Retweets tweet={tweet} setTweets={setTweets} />
-          <Likes tweetId={tweet._id} likes={tweet.likes} />
+          <Likes tweet={tweet} />
           <div className="flex cursor-pointer items-center space-x-3 text-gray-400">
             <ArrowUpTrayIcon className="w-5 h-5" />
           </div>

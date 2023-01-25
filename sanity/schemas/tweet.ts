@@ -6,13 +6,14 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'tweetType',
-      title: 'Tweet Type',
+      name: 'text',
+      title: 'Text in Tweet',
       type: 'string',
     }),
     defineField({
-      name: 'text',
-      title: 'Text in Tweet',
+      name: 'tweetType',
+      title: 'Tweet Type',
+      description: "'tweet' or 'retweet'",
       type: 'string',
     }),
     defineField({
@@ -23,7 +24,7 @@ export default defineType({
     }),
     defineField({
       name: 'username',
-      title: 'Username',
+      title: 'UserName',
       type: 'string',
     }),
     defineField({
@@ -42,10 +43,20 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'likesCount',
+      title: 'Likes Count',
+      type: 'number',
+    }),
+    defineField({
       name: 'likes',
       title: 'Liked Users',
       type: 'array',
       of: [{type: 'string'}],
+    }),
+    defineField({
+      name: 'retweetsCount',
+      title: 'Retweets Count',
+      type: 'number',
     }),
     defineField({
       name: 'retweets',

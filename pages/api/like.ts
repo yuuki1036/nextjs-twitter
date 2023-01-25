@@ -1,6 +1,6 @@
-import { mutateEndpoint } from "lib/constants";
+import { MUTATE_END_POINT } from "lib/constants";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { TTweetBody, TTweetUpdateLikes } from "type";
+import { TTweetUpdateLikes } from "type";
 
 type Data = {
   message: string;
@@ -20,12 +20,16 @@ export default async function handler(
           set: {
             likes: data.likes,
           },
+          [data.mode]: {
+            // inc or dec
+            likesCount: 1,
+          },
         },
       },
     ],
   };
 
-  const result = await fetch(mutateEndpoint, {
+  const result = await fetch(MUTATE_END_POINT, {
     headers: {
       "content-type": "application/json",
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_SANITY_API_TOKEN}`,

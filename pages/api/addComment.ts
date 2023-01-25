@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { mutateEndpoint } from "lib/constants";
+import { MUTATE_END_POINT } from "lib/constants";
 import { TCommentBody } from "type";
 
 type Data = {
@@ -29,7 +29,7 @@ export default async function handler(
     ],
   };
 
-  const result = await fetch(mutateEndpoint, {
+  const result = await fetch(MUTATE_END_POINT, {
     headers: {
       "content-type": "application/json",
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_SANITY_API_TOKEN}`,

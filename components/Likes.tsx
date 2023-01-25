@@ -1,31 +1,32 @@
-import React, { FC, useEffect, useLayoutEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { TTweetUpdateLikes } from "type";
+import { TTweet, TTweetUpdateLikes } from "type";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
-import CountUp from "react-countup";
 import cn from "classnames";
 
 type Props = {
-  tweetId: string;
-  likes: string[];
+  tweet: TTweet;
 };
 
-const Likes: FC<Props> = ({ tweetId, likes }) => {
+type TMode = "inc" | "dec";
+
+const Likes: FC<Props> = ({ tweet }) => {
   const { data: session } = useSession();
-  const [count, setCount] = useState(likes.length);
+  const [count, setCount] = useState(tweet.likesCount);
   const [liked, setLiked] = useState<boolean>(
-    likes.includes(session?.user?.name || "")
+    !!session && tweet.likes.includes(session?.user?.name || "")
   );
 
-  // wait until get username
+  // username取得後に実行
   useEffect(() => {
-    setLiked(likes.includes(session?.user?.name || ""));
+    setLiked(!!session && tweet.likes.includes(session?.user?.name || ""));
   }, [session]);
 
   const handleClick = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.preventDefault();
-    let updateLikes = [...likes];
+    let updateLikes = [...tweet.likes];
+    let mode: TMode = liked ? "dec" : "inc";
 
     if (liked) {
       // decrement
@@ -41,12 +42,13 @@ const Likes: FC<Props> = ({ tweetId, likes }) => {
 
     const uniqueLikes = Array.from(new Set(updateLikes));
 
-    const tweetBody: TTweetUpdateLikes = {
-      id: tweetId,
+    const data: TTweetUpdateLikes = {
+      id: tweet._id,
       likes: uniqueLikes,
+      mode,
     };
     await fetch("/api/like", {
-      body: JSON.stringify(tweetBody),
+      body: JSON.stringify(data),
       method: "POST",
     });
   };
@@ -54,15 +56,22 @@ const Likes: FC<Props> = ({ tweetId, likes }) => {
   return (
     <div
       onClick={handleClick}
-      className="flex cursor-pointer items-center space-x-3 text-gray-400"
+      className="w-[4rem] flex items-center space-x-1 text-gray-400 cursor-pointer group"
     >
-      {liked ? (
-        <SolidHeartIcon className="w-5 h-5 text-like" />
-      ) : (
-        <HeartIcon className="w-5 h-5" />
-      )}
-      <p className={cn("text-sm", { "text-like": liked })}>
-        <CountUp end={count} />
+      <div className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 ease-out group-hover:text-like group-hover:bg-like/10">
+        {liked ? (
+          <SolidHeartIcon className="w-5 h-5 text-like" />
+        ) : (
+          <HeartIcon className="w-5 h-5" />
+        )}
+      </div>
+      <p
+        className={cn(
+          "text-sm transition-all duration-200 ease-out group-hover:text-like",
+          { "text-like": liked }
+        )}
+      >
+        {count === 0 ? " " : count}
       </p>
     </div>
   );

@@ -12,15 +12,18 @@ export interface TTweet extends TTweetBody {
   _updatedAt: string;
   _rev: string;
   _type: "tweet";
-  tweetType: string;
+  tweetType: "tweet" | "retweet";
   blockTweet: boolean;
+  likesCount: number;
   likes: string[];
+  retweetsCount: number;
   retweets: string[];
 }
 
 export type TTweetUpdateLikes = {
   id: string;
   likes: string[];
+  mode: "inc" | "dec";
 };
 
 export type TTweetUpdateRetweets = {

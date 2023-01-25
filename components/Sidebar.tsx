@@ -18,7 +18,7 @@ const Sidebar = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="col-span-2 flex flex-col items-center px-4 md:items-start">
+    <div className="col-span-1 md:col-span-2 flex flex-col items-center px-4 md:items-start">
       <Image
         alt="Hitokoto"
         src={logo}

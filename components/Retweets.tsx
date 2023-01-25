@@ -8,10 +8,10 @@ import React, {
 import { useSession } from "next-auth/react";
 import { TTweet, TTweetBody, TTweetUpdateRetweets } from "type";
 import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/outline";
-import CountUp from "react-countup";
-import cn from "classnames";
 import { fetchTweets } from "utils/fetchTweets";
 import { toast } from "react-hot-toast";
+import { GUEST_NAME } from "lib/constants";
+import cn from "classnames";
 
 type Props = {
   tweet: TTweet;
@@ -20,14 +20,16 @@ type Props = {
 
 const Retweets: FC<Props> = ({ tweet, setTweets }) => {
   const { data: session } = useSession();
-  const [count, setCount] = useState(tweet.retweets.length);
+  const [count, setCount] = useState(tweet.retweetsCount);
   const [retweeted, setRetweeted] = useState<boolean>(
-    tweet.retweets.includes(session?.user?.name || "")
+    !!session && tweet.retweets.includes(session?.user?.name || "")
   );
 
   // wait until get username
   useEffect(() => {
-    setRetweeted(tweet.retweets.includes(session?.user?.name || ""));
+    setRetweeted(
+      !!session && tweet.retweets.includes(session?.user?.name || "")
+    );
   }, [session]);
 
   const increaceRetweet = async () => {
@@ -53,7 +55,7 @@ const Retweets: FC<Props> = ({ tweet, setTweets }) => {
       username: tweet.username,
       profileImg: tweet.profileImg,
       image: tweet.image,
-      retweeter: session?.user?.name || "",
+      retweeter: session?.user?.name || GUEST_NAME,
     };
     await fetch("/api/addRetweet", {
       body: JSON.stringify(data),
@@ -70,8 +72,8 @@ const Retweets: FC<Props> = ({ tweet, setTweets }) => {
     e.preventDefault();
     if (retweeted) return;
     increaceRetweet();
-    const myPromise = addRetweet();
-    toast.promise(myPromise, {
+    const promise = addRetweet();
+    toast.promise(promise, {
       loading: <b>投稿中...</b>,
       success: <b>もうひとことしました！</b>,
       error: <b>投稿に失敗しました...</b>,
@@ -81,13 +83,20 @@ const Retweets: FC<Props> = ({ tweet, setTweets }) => {
   return (
     <div
       onClick={handleClick}
-      className="flex cursor-pointer items-center space-x-3 text-gray-400"
+      className="w-[4rem] flex items-center space-x-1 text-gray-400 cursor-pointer group"
     >
-      <ArrowPathRoundedSquareIcon
-        className={cn("w-5 h-5", { "text-retweet": retweeted })}
-      />
-      <p className={cn("text-sm", { "text-retweet": retweeted })}>
-        <CountUp end={count} />
+      <div className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 ease-out group-hover:text-retweet group-hover:bg-retweet/10">
+        <ArrowPathRoundedSquareIcon
+          className={cn("w-5 h-5", { "text-retweet": retweeted })}
+        />
+      </div>
+      <p
+        className={cn(
+          "text-sm transition-all duration-200 ease-out group-hover:text-retweet",
+          { "text-retweet": retweeted }
+        )}
+      >
+        {count === 0 ? "" : count}
       </p>
     </div>
   );

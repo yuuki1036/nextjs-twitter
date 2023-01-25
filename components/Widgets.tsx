@@ -4,12 +4,12 @@ import { TwitterTimelineEmbed } from "react-twitter-embed";
 
 const Widgets: FC = () => {
   return (
-    <div className="col-span-2 px-2 mt-2 hidden lg:inline">
-      <div className="flex items-center space-x-2 rounded-full bg-gray-100 p-3 ">
-        <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+    <div className="col-span-2 pl-5 pr-3 mt-3 hidden lg:inline">
+      <div className="flex items-center space-x-2 rounded-xl bg-gray-100 px-3 py-2">
+        <MagnifyingGlassIcon className="h-5 w-5 mt-[0.15rem] text-gray-400" />
         <input
           type="text"
-          placeholder="Search Twitter"
+          placeholder="ひとことをけんさく"
           className="flex-1 bg-transparent outline-none"
         />
       </div>

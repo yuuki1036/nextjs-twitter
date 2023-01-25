@@ -1,28 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { MUTATE_END_POINT } from "lib/constants";
-import { TTweetUpdateRetweets } from "type";
-
-type Data = {
-  message: string;
-};
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<any>
 ) {
-  const data: TTweetUpdateRetweets = JSON.parse(req.body);
-
   const mutations = {
     mutations: [
       {
-        patch: {
-          id: data.id,
-          set: {
-            retweets: data.retweets,
-          },
-          inc: {
-            retweetsCount: 1,
-          },
+        delete: {
+          query: "*[_type == 'tweet' || _type == 'comment']",
         },
       },
     ],

@@ -12,7 +12,7 @@ export default defineType({
     }),
     defineField({
       name: 'username',
-      title: 'Username',
+      title: 'UserName',
       type: 'string',
     }),
     defineField({
