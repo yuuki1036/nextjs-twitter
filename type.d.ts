@@ -14,6 +14,7 @@ export interface TTweet extends TTweetBody {
   _type: "tweet";
   tweetType: "tweet" | "retweet";
   blockTweet: boolean;
+  commentsCount: number;
   likesCount: number;
   likes: string[];
   retweetsCount: number;

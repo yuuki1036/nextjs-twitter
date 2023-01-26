@@ -24,6 +24,7 @@ export default async function handler(
           profileImg: data.profileImg,
           image: data.image,
           retweeter: "",
+          commentsCount: 0,
           likesCount: 0,
           likes: [],
           retweetsCount: 0,

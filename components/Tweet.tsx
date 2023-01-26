@@ -21,6 +21,7 @@ import Likes from "./Likes";
 import Retweets from "./Retweets";
 import { Flipped } from "react-flip-toolkit";
 import { GUEST_IMAGE_PATH, GUEST_NAME } from "lib/constants";
+import Comments from "./Comments";
 
 type Props = {
   tweet: TTweet;
@@ -115,13 +116,7 @@ const Tweet: FC<Props> = ({ tweet, setTweets }) => {
         </div>
 
         <div className="flex justify-between">
-          <div
-            onClick={() => session && setCommentBoxVisible(!commentBoxVisible)}
-            className="flex cursor-pointer items-center space-x-3 text-gray-400"
-          >
-            <ChatBubbleOvalLeftIcon className="w-5 h-5" />
-            <p>{comments.length}</p>
-          </div>
+          <Comments tweet={tweet} />
           <Retweets tweet={tweet} setTweets={setTweets} />
           <Likes tweet={tweet} />
           <div className="flex cursor-pointer items-center space-x-3 text-gray-400">

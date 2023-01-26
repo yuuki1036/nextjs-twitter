@@ -43,6 +43,11 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'commentsCount',
+      title: 'Comments Count',
+      type: 'number',
+    }),
+    defineField({
       name: 'likesCount',
       title: 'Likes Count',
       type: 'number',

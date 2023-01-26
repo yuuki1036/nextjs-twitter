@@ -11,6 +11,7 @@ module.exports = {
         twitter: "#00ADED",
         like: "#F91800",
         retweet: "#00BA7C",
+        comment: "#519DE9",
       },
     },
   },

@@ -115,7 +115,7 @@ const TweetBox: FC<Props> = ({ setTweets }) => {
               </div>
               <button
                 disabled={!input}
-                className="bg-twitter px-[0.4rem] py-2  md:px-5 md:py-2 font-bold text-white rounded-full disabled:opacity-40"
+                className="bg-twitter px-[0.4rem] py-2 md:px-5 md:py-2 font-bold text-white rounded-full disabled:opacity-40"
               >
                 ひとこと
               </button>
