@@ -9,8 +9,7 @@ type Props = {
 
 const Comments: FC<Props> = ({ tweet }) => {
   const { handleOpen } = useContext(CommentModalContext);
-  const [count, setCount] = useState(tweet.commentsCount);
-
+  const [count, setCount] = useState<number>(tweet.commentsCount);
   return (
     <div
       onClick={() => handleOpen(tweet)}

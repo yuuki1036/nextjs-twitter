@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import React, { Dispatch, FC, SetStateAction, useState } from "react";
 import { useSession } from "next-auth/react";
 import { TTweet, TTweetBody, TTweetUpdateRetweets } from "type";
 import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/outline";
@@ -24,13 +18,6 @@ const Retweets: FC<Props> = ({ tweet, setTweets }) => {
   const [retweeted, setRetweeted] = useState<boolean>(
     !!session && tweet.retweets.includes(session?.user?.name || "")
   );
-
-  // wait until get username
-  useEffect(() => {
-    setRetweeted(
-      !!session && tweet.retweets.includes(session?.user?.name || "")
-    );
-  }, [session]);
 
   const increaceRetweet = async () => {
     setRetweeted(true);

@@ -26,6 +26,14 @@ export default async function handler(
           },
         },
       },
+      {
+        patch: {
+          id: data.tweetId,
+          inc: {
+            commentsCount: 1,
+          },
+        },
+      },
     ],
   };
 
@@ -39,5 +47,6 @@ export default async function handler(
   });
 
   const json = await result.json();
+  console.log(json);
   res.status(200).json({ message: "complete" });
 }

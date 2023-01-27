@@ -1,26 +1,15 @@
-import React, {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import React, { Dispatch, FC, SetStateAction } from "react";
 import { useSession } from "next-auth/react";
-import { TComment, TCommentBody, TTweet, TTweetBody } from "type";
-import { fetchComments } from "utils/fetchComments";
+import { TTweet } from "type";
 import ReactTimeago from "react-timeago";
-import { toast } from "react-hot-toast";
 import {
   ArrowPathRoundedSquareIcon,
   ArrowUpTrayIcon,
-  ChatBubbleOvalLeftIcon,
-  HeartIcon,
 } from "@heroicons/react/24/outline";
-import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
 import Likes from "./Likes";
 import Retweets from "./Retweets";
 import { Flipped } from "react-flip-toolkit";
-import { GUEST_IMAGE_PATH, GUEST_NAME } from "lib/constants";
+import { GUEST_NAME } from "lib/constants";
 import Comments from "./Comments";
 
 type Props = {
@@ -29,44 +18,6 @@ type Props = {
 };
 
 const Tweet: FC<Props> = ({ tweet, setTweets }) => {
-  const { data: session } = useSession();
-  // comment
-  const [comments, setComments] = useState<TComment[]>([]);
-  const [commentBoxVisible, setCommentBoxVisible] = useState<boolean>(false);
-  const [input, setInput] = useState<string>("");
-
-  const refreshComments = async () => {
-    const comments: TComment[] = await fetchComments(tweet._id);
-    setComments(comments);
-  };
-
-  useEffect(() => {
-    refreshComments();
-  }, []);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const commentBody: TCommentBody = {
-      comment: input,
-      username: session?.user?.name || GUEST_NAME,
-      profileImg: session?.user?.image || GUEST_IMAGE_PATH,
-      tweetId: tweet._id,
-    };
-    const result = await fetch("/api/addComment", {
-      body: JSON.stringify(commentBody),
-      method: "POST",
-    });
-    const json = await result.json();
-
-    refreshComments();
-    toast("Comment Posted", {
-      icon: "🚀",
-    });
-
-    setInput("");
-    setCommentBoxVisible(false);
-  };
-
   return (
     <Flipped flipId={tweet._id}>
       <div className="flex flex-col border-y border-gray-100 px-5 py-4">
@@ -123,55 +74,6 @@ const Tweet: FC<Props> = ({ tweet, setTweets }) => {
             <ArrowUpTrayIcon className="w-5 h-5" />
           </div>
         </div>
-
-        {commentBoxVisible && (
-          <form onSubmit={handleSubmit} className="mt-3 flex space-x-3">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Write a comment..."
-              className="flex-1 rounded-lg bg-gray-100 p-2 outline-none"
-            />
-            <button
-              type="submit"
-              disabled={!input}
-              className="text-twitter disabled:text-gray-200"
-            >
-              Post
-            </button>
-          </form>
-        )}
-
-        {comments?.length > 0 && (
-          <div className="my-2 mt-5 max-h-44 space-y-5 overflow-y-scroll border-t border-gray-100 p-5">
-            {comments.map((comment) => (
-              <div key={comment._id} className=" relative flex space-x-2">
-                <hr className="absolute left-5 top-10 h-8 border-x border-twitter/30" />
-                <picture>
-                  <img
-                    className="mt-2 h-7 w-7 rounded-full object-cover"
-                    src={comment.profileImg}
-                    alt={comment.username}
-                  />
-                </picture>
-                <div>
-                  <div className="flex items-center space-x-1">
-                    <p className="mr-1 font-bold">{comment.username}</p>
-                    <p className="hidden text-sm text-gray-500 lg:inline">
-                      @{comment.username.replace(/\s+/g, "").toLowerCase()}
-                    </p>
-                    <ReactTimeago
-                      className="text-sm text-gray-500"
-                      date={comment._createdAt}
-                    />
-                  </div>
-                  <p>{comment.comment}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     </Flipped>
   );

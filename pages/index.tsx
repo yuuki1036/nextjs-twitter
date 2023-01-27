@@ -6,24 +6,35 @@ import Widgets from "components/Widgets";
 import { fetchTweets } from "utils/fetchTweets";
 import { TTweet } from "type";
 import { Toaster } from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 type Props = {
   tweets: TTweet[];
 };
 
 const Home: NextPage<Props> = ({ tweets }) => {
+  const { data: session, status } = useSession();
+
   return (
-    <div className="mx-auto lg:max-w-6xl max-h-screen overflow-hidden">
+    <>
       <Head>
         <title>HITOKOTO</title>
       </Head>
       <Toaster />
-      <main className="grid grid-cols-9">
-        <Sidebar />
-        <Feed tweets={tweets} />
-        <Widgets />
-      </main>
-    </div>
+      {status === "loading" ? (
+        <div className="w-screen h-screen flex items-center justify-center">
+          <p>Loading...</p>
+        </div>
+      ) : (
+        <main className="mx-auto lg:max-w-6xl max-h-screen overflow-hidden">
+          <div className="grid grid-cols-9">
+            <Sidebar />
+            <Feed tweets={tweets} />
+            <Widgets />
+          </div>
+        </main>
+      )}
+    </>
   );
 };
 

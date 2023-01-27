@@ -18,13 +18,16 @@ type Props = {
 };
 
 const TweetBox: FC<Props> = ({ setTweets }) => {
+  const { data: session } = useSession();
+  const userName = session?.user?.name || GUEST_NAME;
+  const userImage = session?.user?.image || GUEST_IMAGE_PATH;
+
   // tweet input
   const [input, setInput] = useState<string>("");
   // tweet with image
   const [image, setImage] = useState<string>("");
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  const { data: session } = useSession();
   const [isImageUrlBoxOpen, setIsImageUrlBoxOpen] = useState<boolean>(false);
 
   const addImageToTweet = (
@@ -41,8 +44,8 @@ const TweetBox: FC<Props> = ({ setTweets }) => {
   const postTweet = async () => {
     const data: TTweetBody = {
       text: input,
-      username: session?.user?.name || GUEST_NAME,
-      profileImg: session?.user?.image || GUEST_IMAGE_PATH,
+      username: userName,
+      profileImg: userImage,
       image: image,
       retweeter: "",
     };
@@ -50,7 +53,7 @@ const TweetBox: FC<Props> = ({ setTweets }) => {
       body: JSON.stringify(data),
       method: "POST",
     });
-    // feedを更新
+    // feed更新
     const newTweets = await fetchTweets();
     setTweets(newTweets);
     return Promise.resolve();

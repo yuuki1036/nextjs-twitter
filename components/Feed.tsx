@@ -10,7 +10,7 @@ import CommentsModal from "./CommentsModal";
 
 export const CommentModalContext = createContext(
   {} as {
-    selectedTweet: TTweet | null;
+    selectedTweet?: TTweet;
     handleOpen: (tweet: TTweet) => void;
     handleClose: () => void;
   }
@@ -23,21 +23,19 @@ type Props = {
 const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
   const [tweets, setTweets] = useState<TTweet[]>(tweetsProp);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [selectedTweet, setSelectedTweet] = useState<TTweet | null>(null);
-
+  const [selectedTweet, setSelectedTweet] = useState<TTweet | undefined>(
+    undefined
+  );
+  // CommentModalで使用
   const handleOpen = (tweet: TTweet) => {
     setSelectedTweet(tweet);
     setModalOpen(true);
   };
-
-  const handleClose = () => {
-    setSelectedTweet(null);
-    setModalOpen(false);
-  };
+  const handleClose = () => setModalOpen(false);
 
   const getTweets = async () => {
-    const tweets = await fetchTweets();
-    setTweets(tweets);
+    const newTweets = await fetchTweets();
+    setTweets([...newTweets]);
     return Promise.resolve();
   };
 

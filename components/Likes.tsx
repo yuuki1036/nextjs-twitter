@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { useSession } from "next-auth/react";
 import { TTweet, TTweetUpdateLikes } from "type";
 import { HeartIcon } from "@heroicons/react/24/outline";
@@ -17,11 +17,6 @@ const Likes: FC<Props> = ({ tweet }) => {
   const [liked, setLiked] = useState<boolean>(
     !!session && tweet.likes.includes(session?.user?.name || "")
   );
-
-  // username取得後に実行
-  useEffect(() => {
-    setLiked(!!session && tweet.likes.includes(session?.user?.name || ""));
-  }, [session]);
 
   const handleClick = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.preventDefault();

@@ -13,7 +13,6 @@ const CommentsModal: FC = () => {
   const { data: session } = useSession();
   const userName = session?.user?.name || GUEST_NAME;
   const userImage = session?.user?.image || GUEST_IMAGE_PATH;
-
   const { selectedTweet, handleClose } = useContext(CommentModalContext);
   const tweet = selectedTweet as TTweet;
   // comment
@@ -56,55 +55,60 @@ const CommentsModal: FC = () => {
       onClick={() => handleClose()}
       className="fixed inset-0 z-10 flex items-center justify-center bg-black/40"
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg bg-white rounded-xl"
-      >
-        <div className="max-h-96 p-3 overflow-y-scroll">
-          <div className="p-1 sticky">
-            <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
-              <XMarkIcon className="w-5 h-5" />
+      <div className="w-full max-w-lg rounded-xl bg-white py-2 pl-1 pr-2 pt-0">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="max-h-[80vh] overflow-y-scroll rounded-xl"
+        >
+          <div className="px-1 py-3 sticky top-0 z-20 backdrop-blur-sm bg-white/80 rounded-2xl">
+            <div
+              onClick={() => handleClose()}
+              className="w-[2.2rem] h-[2.2rem] flex items-center justify-center hover:bg-gray-200 rounded-full transition-all duration-200 ease-out cursor-pointer"
+            >
+              <XMarkIcon className="w-[1.4rem] h-[1.4rem]" />
             </div>
           </div>
-          <div className="flex space-x-3">
-            <div className="flex flex-col">
-              <picture>
-                <img
-                  className="w-11 h-11 rounded-full"
-                  src={tweet.profileImg}
-                  alt={tweet.username}
-                />
-              </picture>
-              <div className="w-[2px] mx-auto bg-gray-200"></div>
-            </div>
-            <div>
-              <div className="flex items-end space-x-1">
-                <p className="mr-1 font-bold">{tweet.username}</p>
-                {tweet.username !== GUEST_NAME && (
-                  <p className="hidden text-sm text-gray-500 sm:inline">
-                    @{tweet.username.replace(/\s+/g, "").toLowerCase()}
-                  </p>
-                )}
-                <ReactTimeago
-                  className="text-sm text-gray-500"
-                  date={tweet._createdAt}
-                />
+
+          <div className="p-2">
+            <div className="flex space-x-2">
+              <div className="flex flex-col">
+                <picture>
+                  <img
+                    className="w-12 h-12 mb-1 rounded-full"
+                    src={tweet.profileImg}
+                    alt={tweet.username}
+                  />
+                </picture>
+                <div className="flex-1 w-[2px] mx-auto bg-gray-400"></div>
               </div>
+              <div>
+                <div className="flex items-end space-x-1">
+                  <p className="mr-1 font-bold">{tweet.username}</p>
+                  {tweet.username !== GUEST_NAME && (
+                    <p className="hidden text-sm text-gray-500 sm:inline">
+                      @{tweet.username.replace(/\s+/g, "").toLowerCase()}&nbsp;
+                      {"･"}
+                    </p>
+                  )}
+                  <ReactTimeago
+                    className="text-sm text-gray-500"
+                    date={tweet._createdAt}
+                  />
+                </div>
 
-              <p className="whitespace-pre-wrap">{`${tweet.text}`}</p>
+                <p className="mb-7 whitespace-pre-wrap">{`${tweet.text}`}</p>
+              </div>
             </div>
-          </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="flex space-x-3">
-              <picture className="w-11 h-11">
-                <img
-                  className="w-11 h-11 rounded-full"
-                  src={userImage}
-                  alt={userName}
-                />
-              </picture>
-              <div className="">
+            <form onSubmit={handleSubmit} className="mt-1">
+              <div className="flex space-x-2">
+                <picture>
+                  <img
+                    className="w-12 h-12 rounded-full"
+                    src={userImage}
+                    alt={userName}
+                  />
+                </picture>
                 <ReactTextareaAutosize
                   maxRows={10}
                   minRows={3}
@@ -112,19 +116,64 @@ const CommentsModal: FC = () => {
                   autoFocus={true}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="なにかひとことどうぞ..."
-                  className="mt-3 w-full outline-none md:placeholder:text-xl scrollbar-hide"
+                  className="flex-1 w-full mt-[0.6rem] outline-none md:placeholder:text-xl scrollbar-hide"
                 />
               </div>
+              <div className="mt-2 flex justify-end">
+                <button
+                  disabled={!input}
+                  className="bg-twitter px-[0.4rem] py-1 md:px-5 md:py-2 font-bold text-white rounded-full disabled:opacity-40"
+                >
+                  ひとこと
+                </button>
+              </div>
+            </form>
+
+            <div className="">
+              {comments?.length > 0 && (
+                <div className="">
+                  <hr className="my-4" />
+                  {comments.map((comment, idx) => (
+                    <div key={comment._id} className="flex space-x-2 mt-1">
+                      <div className="flex flex-col">
+                        <picture>
+                          <img
+                            className="w-12 h-12 mb-1 rounded-full"
+                            src={comment.profileImg}
+                            alt={comment.username}
+                          />
+                        </picture>
+                        {idx !== comments.length - 1 && (
+                          <div className="flex-1 w-[2px] mx-auto bg-gray-400"></div>
+                        )}
+                      </div>
+                      <div>
+                        <div className="flex items-end space-x-1">
+                          <p className="mr-1 font-bold">{comment.username}</p>
+                          {comment.username !== GUEST_NAME && (
+                            <p className="hidden text-sm text-gray-500 sm:inline">
+                              @
+                              {comment.username
+                                .replace(/\s+/g, "")
+                                .toLowerCase()}
+                              &nbsp;
+                              {"･"}
+                            </p>
+                          )}
+                          <ReactTimeago
+                            className="text-sm text-gray-500"
+                            date={comment._createdAt}
+                          />
+                        </div>
+
+                        <p className="mb-7 whitespace-pre-wrap">{`${comment.comment}`}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="mt-2 flex justify-end">
-              <button
-                disabled={!input}
-                className="bg-twitter px-[0.4rem] py-1 md:px-5 md:py-2 font-bold text-white rounded-full disabled:opacity-40"
-              >
-                ひとこと
-              </button>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
