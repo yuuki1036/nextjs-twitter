@@ -1,42 +1,130 @@
-import React, { FC, useContext } from "react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { GUEST_NAME, GUEST_IMAGE_PATH } from "lib/constants";
+import { useSession } from "next-auth/react";
+import React, { FC, useContext, useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import ReactTextareaAutosize from "react-textarea-autosize";
+import ReactTimeago from "react-timeago";
+import { TComment, TCommentBody, TTweet } from "type";
+import { fetchComments } from "utils/fetchComments";
 import { CommentModalContext } from "./Feed";
 
 const CommentsModal: FC = () => {
-  const { tweetId, handleOpen, handleClose } = useContext(CommentModalContext);
+  const { data: session } = useSession();
+  const userName = session?.user?.name || GUEST_NAME;
+  const userImage = session?.user?.image || GUEST_IMAGE_PATH;
+
+  const { selectedTweet, handleClose } = useContext(CommentModalContext);
+  const tweet = selectedTweet as TTweet;
+  // comment
+  const [comments, setComments] = useState<TComment[]>([]);
+  const [input, setInput] = useState<string>("");
+
+  const refreshComments = async () => {
+    const comments: TComment[] = await fetchComments(tweet._id);
+    setComments(comments);
+  };
+
+  useEffect(() => {
+    refreshComments();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data: TCommentBody = {
+      comment: input,
+      username: userName,
+      profileImg: userImage,
+      tweetId: tweet._id,
+    };
+    const result = await fetch("/api/addComment", {
+      body: JSON.stringify(data),
+      method: "POST",
+    });
+    const json = await result.json();
+
+    refreshComments();
+    toast("Comment Posted", {
+      icon: "🚀",
+    });
+
+    setInput("");
+  };
+
   return (
-    <div className="fixed inset-0 z-10 overflow-y-auto">
+    <div
+      onClick={() => handleClose()}
+      className="fixed inset-0 z-10 flex items-center justify-center bg-black/40"
+    >
       <div
-        className="fixed inset-0 w-full h-full bg-black opacity-40"
-        onClick={() => handleClose()}
-      ></div>
-      <div className="flex items-center min-h-screen px-4 py-8">
-        <div className="relative w-full max-w-lg p-4 mx-auto bg-white rounded-md shadow-lg">
-          <div className="mt-3 sm:flex">
-            <div className="flex items-center justify-center flex-none w-12 h-12 mx-auto bg-red-100 rounded-full"></div>
-            <div className="mt-2 text-center sm:ml-4 sm:text-left">
-              <h4 className="text-lg font-medium text-gray-800">
-                Delete account ?
-              </h4>
-              <p className="mt-2 text-[15px] leading-relaxed text-gray-500">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </p>
-              <div className="items-center gap-2 mt-3 sm:flex">
-                <button
-                  className="w-full mt-2 p-2.5 flex-1 text-white bg-red-600 rounded-md outline-none ring-offset-2 ring-red-600 focus:ring-2"
-                  onClick={() => handleClose()}
-                >
-                  Delete
-                </button>
-                <button
-                  className="w-full mt-2 p-2.5 flex-1 text-gray-800 rounded-md outline-none border ring-offset-2 ring-indigo-600 focus:ring-2"
-                  onClick={() => handleClose()}
-                >
-                  Cancel
-                </button>
-              </div>
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-lg bg-white rounded-xl"
+      >
+        <div className="max-h-96 p-3 overflow-y-scroll">
+          <div className="p-1 sticky">
+            <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
+              <XMarkIcon className="w-5 h-5" />
             </div>
           </div>
+          <div className="flex space-x-3">
+            <div className="flex flex-col">
+              <picture>
+                <img
+                  className="w-11 h-11 rounded-full"
+                  src={tweet.profileImg}
+                  alt={tweet.username}
+                />
+              </picture>
+              <div className="w-[2px] mx-auto bg-gray-200"></div>
+            </div>
+            <div>
+              <div className="flex items-end space-x-1">
+                <p className="mr-1 font-bold">{tweet.username}</p>
+                {tweet.username !== GUEST_NAME && (
+                  <p className="hidden text-sm text-gray-500 sm:inline">
+                    @{tweet.username.replace(/\s+/g, "").toLowerCase()}
+                  </p>
+                )}
+                <ReactTimeago
+                  className="text-sm text-gray-500"
+                  date={tweet._createdAt}
+                />
+              </div>
+
+              <p className="whitespace-pre-wrap">{`${tweet.text}`}</p>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            <div className="flex space-x-3">
+              <picture className="w-11 h-11">
+                <img
+                  className="w-11 h-11 rounded-full"
+                  src={userImage}
+                  alt={userName}
+                />
+              </picture>
+              <div className="">
+                <ReactTextareaAutosize
+                  maxRows={10}
+                  minRows={3}
+                  value={input}
+                  autoFocus={true}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="なにかひとことどうぞ..."
+                  className="mt-3 w-full outline-none md:placeholder:text-xl scrollbar-hide"
+                />
+              </div>
+            </div>
+            <div className="mt-2 flex justify-end">
+              <button
+                disabled={!input}
+                className="bg-twitter px-[0.4rem] py-1 md:px-5 md:py-2 font-bold text-white rounded-full disabled:opacity-40"
+              >
+                ひとこと
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

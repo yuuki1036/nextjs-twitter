@@ -10,8 +10,8 @@ import CommentsModal from "./CommentsModal";
 
 export const CommentModalContext = createContext(
   {} as {
-    tweetId: string;
-    handleOpen: (id: string) => void;
+    selectedTweet: TTweet | null;
+    handleOpen: (tweet: TTweet) => void;
     handleClose: () => void;
   }
 );
@@ -23,15 +23,15 @@ type Props = {
 const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
   const [tweets, setTweets] = useState<TTweet[]>(tweetsProp);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [tweetId, setTweetId] = useState<string>("");
+  const [selectedTweet, setSelectedTweet] = useState<TTweet | null>(null);
 
-  const handleOpen = (id: string) => {
-    setTweetId(id);
+  const handleOpen = (tweet: TTweet) => {
+    setSelectedTweet(tweet);
     setModalOpen(true);
   };
 
   const handleClose = () => {
-    setTweetId("");
+    setSelectedTweet(null);
     setModalOpen(false);
   };
 
@@ -51,7 +51,9 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
   };
 
   return (
-    <CommentModalContext.Provider value={{ tweetId, handleOpen, handleClose }}>
+    <CommentModalContext.Provider
+      value={{ selectedTweet, handleOpen, handleClose }}
+    >
       <div className="col-span-8 md:col-span-7 lg:col-span-5 border-x max-h-screen overflow-scroll scrollbar-hide">
         <div className="sticky top-0 z-10 px-5 py-3 md:py-4 backdrop-blur-sm bg-white/80 flex items-center justify-between border-y border-gray-100">
           <h1 className=" text-xl font-bold">Home</h1>
