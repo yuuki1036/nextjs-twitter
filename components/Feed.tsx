@@ -47,7 +47,7 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
       <CommentModalContext.Provider
         value={{ selectedTweet, handleOpen, handleClose }}
       >
-        <div className="col-span-8 md:col-span-7 lg:col-span-5 border-x max-h-screen overflow-scroll scrollbar-hide">
+        <div className="col-span-9 md:col-span-7 lg:col-span-5 border-x max-h-screen overflow-scroll scrollbar-hide">
           <div className="sticky top-0 z-10 px-5 py-3 md:py-4 backdrop-blur-sm bg-white/80 flex items-center justify-between border-y border-gray-100">
             <h1 className=" text-xl font-bold">Home</h1>
             <ArrowPathIcon

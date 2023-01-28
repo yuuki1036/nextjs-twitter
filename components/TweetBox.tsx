@@ -77,7 +77,7 @@ const TweetBox: FC<Props> = ({ setTweets }) => {
     <div className="flex px-5 py-4 space-x-1 md:space-x-2">
       <picture>
         <img
-          className="w-10 h-10 rounded-full object-cover"
+          className="w-12 h-12 rounded-full object-cover"
           src={session?.user?.image || GUEST_IMAGE_PATH}
           alt={session?.user?.name || GUEST_NAME}
         />
@@ -91,7 +91,7 @@ const TweetBox: FC<Props> = ({ setTweets }) => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="なにかひとことおねがいします..."
-              className="mt-2 w-full outline-none md:placeholder:text-xl scrollbar-hide"
+              className="mt-3 mb-1 w-full outline-none md:placeholder:text-xl scrollbar-hide"
             />
             <div className="flex items-center">
               <div className="flex flex-1">
@@ -118,7 +118,7 @@ const TweetBox: FC<Props> = ({ setTweets }) => {
               </div>
               <button
                 disabled={!input}
-                className="bg-twitter px-[0.4rem] py-2 md:px-5 md:py-2 font-bold text-white rounded-full disabled:opacity-40"
+                className="bg-twitter px-[0.6rem] py-[0.4rem] md:px-5 md:py-2 font-bold text-white text-sm md:text-base rounded-full disabled:opacity-40"
               >
                 ひとこと
               </button>

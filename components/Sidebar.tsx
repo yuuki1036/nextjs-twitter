@@ -13,20 +13,26 @@ import {
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import logo from "public/logo.png";
+import Link from "next/link";
 
 const Sidebar = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="col-span-1 md:col-span-2 flex flex-col items-center px-4 md:items-start">
-      <Image
-        alt="Hitokoto"
-        src={logo}
-        width={40}
-        height={40}
-        className="w-11 h-11 p-[0.35rem] m-3"
-      />
-      <SidebarRow Icon={HomeIcon} title="Home" />
+    <div className="hidden md:block col-span-1 md:col-span-2 flex flex-col items-center px-4 md:items-start  ">
+      <Link href="/">
+        <Image
+          alt="Hitokoto"
+          src={logo}
+          width={40}
+          height={40}
+          className="w-11 h-11 p-[0.35rem] m-3"
+        />
+      </Link>
+
+      <Link href="/">
+        <SidebarRow Icon={HomeIcon} title="Home" />
+      </Link>
       <SidebarRow Icon={HashtagIcon} title="Explore" />
       <SidebarRow Icon={BellIcon} title="Notifications" />
       <SidebarRow Icon={EnvelopeIcon} title="Messages" />

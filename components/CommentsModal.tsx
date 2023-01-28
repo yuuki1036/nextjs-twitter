@@ -1,15 +1,14 @@
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { CommentModalContext, FetchTweetContext } from "contexts/contexts";
+import { TComment, TCommentBody, TTweet } from "type";
 import { GUEST_NAME, GUEST_IMAGE_PATH } from "lib/constants";
 import { useSession } from "next-auth/react";
-import React, { FC, Suspense, useContext, useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
+import { fetchComments } from "utils/fetchComments";
 import ReactTextareaAutosize from "react-textarea-autosize";
 import ReactTimeago from "react-timeago";
-import { TComment, TCommentBody, TTweet } from "type";
-import { fetchComments } from "utils/fetchComments";
-import { Comment } from "react-loader-spinner";
 import { Flipped, Flipper } from "react-flip-toolkit";
+import { toast } from "react-hot-toast";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 const CommentsModal: FC = () => {
   const { data: session } = useSession();
@@ -65,7 +64,7 @@ const CommentsModal: FC = () => {
       onClick={() => handleClose()}
       className="fixed inset-0 z-10 flex items-center justify-center bg-black/40"
     >
-      <div className="w-full max-w-lg rounded-xl bg-white py-2 pl-1 pr-2 pt-0">
+      <div className="w-full max-w-lg mx-3 md:mx-0 rounded-xl bg-white py-2 pl-1 pr-2 pt-0">
         <div
           onClick={(e) => e.stopPropagation()}
           className="max-h-[80vh] overflow-y-scroll rounded-xl"
@@ -92,13 +91,15 @@ const CommentsModal: FC = () => {
                 <div className="flex-1 w-[2px] mx-auto bg-gray-400"></div>
               </div>
               <div>
-                <div className="flex items-end space-x-1">
+                <div className="flex items-end">
                   <p className="mr-1 font-bold">{tweet.username}</p>
-                  {tweet.username !== GUEST_NAME && (
+                  {tweet.username !== GUEST_NAME ? (
                     <p className="hidden text-sm text-gray-500 sm:inline">
                       @{tweet.username.replace(/\s+/g, "").toLowerCase()}&nbsp;
                       {"･"}
                     </p>
+                  ) : (
+                    <span className="mr-1"></span>
                   )}
                   <ReactTimeago
                     className="text-sm text-gray-500"
@@ -132,7 +133,7 @@ const CommentsModal: FC = () => {
               <div className="mt-2 flex justify-end">
                 <button
                   disabled={!input}
-                  className="bg-twitter px-[0.4rem] py-1 md:px-5 md:py-2 font-bold text-white rounded-full disabled:opacity-40"
+                  className="bg-twitter px-[0.6rem] py-1 md:px-5 md:py-2 font-bold text-white text-sm md:text-base rounded-full disabled:opacity-40"
                 >
                   ひとこと
                 </button>
@@ -164,7 +165,7 @@ const CommentsModal: FC = () => {
                               <p className="mr-1 font-bold">
                                 {comment.username}
                               </p>
-                              {comment.username !== GUEST_NAME && (
+                              {comment.username !== GUEST_NAME ? (
                                 <p className="hidden text-sm text-gray-500 sm:inline">
                                   @
                                   {comment.username
@@ -173,6 +174,8 @@ const CommentsModal: FC = () => {
                                   &nbsp;
                                   {"･"}
                                 </p>
+                              ) : (
+                                <span className="mr-1"></span>
                               )}
                               <ReactTimeago
                                 className="text-sm text-gray-500"

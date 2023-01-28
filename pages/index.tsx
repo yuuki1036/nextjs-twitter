@@ -7,6 +7,8 @@ import { fetchTweets } from "utils/fetchTweets";
 import { TTweet } from "type";
 import { Toaster } from "react-hot-toast";
 import { useSession } from "next-auth/react";
+import cn from "classnames";
+import MobileMenu from "components/MobileMenu";
 
 type Props = {
   tweets: TTweet[];
@@ -21,19 +23,19 @@ const Home: NextPage<Props> = ({ tweets }) => {
         <title>HITOKOTO</title>
       </Head>
       <Toaster />
-      {status === "loading" ? (
-        <div className="w-screen h-screen flex items-center justify-center">
-          <p>Loading...</p>
+      <div
+        className={cn("fixed w-screen h-screen z-50", {
+          hidden: status !== "loading",
+        })}
+      ></div>
+      <main className="mx-auto lg:max-w-6xl max-h-screen overflow-hidden">
+        <div className="grid grid-cols-9">
+          <Sidebar />
+          <Feed tweets={tweets} />
+          <Widgets />
+          <MobileMenu />
         </div>
-      ) : (
-        <main className="mx-auto lg:max-w-6xl max-h-screen overflow-hidden">
-          <div className="grid grid-cols-9">
-            <Sidebar />
-            <Feed tweets={tweets} />
-            <Widgets />
-          </div>
-        </main>
-      )}
+      </main>
     </>
   );
 };
