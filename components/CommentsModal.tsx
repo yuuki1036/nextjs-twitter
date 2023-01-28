@@ -1,18 +1,21 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { CommentModalContext, FetchTweetContext } from "contexts/contexts";
 import { GUEST_NAME, GUEST_IMAGE_PATH } from "lib/constants";
 import { useSession } from "next-auth/react";
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, Suspense, useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import ReactTextareaAutosize from "react-textarea-autosize";
 import ReactTimeago from "react-timeago";
 import { TComment, TCommentBody, TTweet } from "type";
 import { fetchComments } from "utils/fetchComments";
-import { CommentModalContext } from "./Feed";
+import { Comment } from "react-loader-spinner";
+import { Flipped, Flipper } from "react-flip-toolkit";
 
 const CommentsModal: FC = () => {
   const { data: session } = useSession();
   const userName = session?.user?.name || GUEST_NAME;
   const userImage = session?.user?.image || GUEST_IMAGE_PATH;
+  const { refreshFeed } = useContext(FetchTweetContext);
   const { selectedTweet, handleClose } = useContext(CommentModalContext);
   const tweet = selectedTweet as TTweet;
   // comment
@@ -20,7 +23,7 @@ const CommentsModal: FC = () => {
   const [input, setInput] = useState<string>("");
 
   const refreshComments = async () => {
-    const comments: TComment[] = await fetchComments(tweet._id);
+    const comments = await fetchComments(tweet._id);
     setComments(comments);
   };
 
@@ -28,8 +31,7 @@ const CommentsModal: FC = () => {
     refreshComments();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const addComment = async () => {
     const data: TCommentBody = {
       comment: input,
       username: userName,
@@ -40,11 +42,19 @@ const CommentsModal: FC = () => {
       body: JSON.stringify(data),
       method: "POST",
     });
-    const json = await result.json();
 
     refreshComments();
-    toast("Comment Posted", {
-      icon: "🚀",
+    refreshFeed();
+    return Promise.resolve();
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const promise = addComment();
+    toast.promise(promise, {
+      loading: <b>投稿中...</b>,
+      success: <b>ひとことかえしました！</b>,
+      error: <b>投稿に失敗しました...</b>,
     });
 
     setInput("");
@@ -133,43 +143,49 @@ const CommentsModal: FC = () => {
               {comments?.length > 0 && (
                 <div className="">
                   <hr className="my-4" />
-                  {comments.map((comment, idx) => (
-                    <div key={comment._id} className="flex space-x-2 mt-1">
-                      <div className="flex flex-col">
-                        <picture>
-                          <img
-                            className="w-12 h-12 mb-1 rounded-full"
-                            src={comment.profileImg}
-                            alt={comment.username}
-                          />
-                        </picture>
-                        {idx !== comments.length - 1 && (
-                          <div className="flex-1 w-[2px] mx-auto bg-gray-400"></div>
-                        )}
-                      </div>
-                      <div>
-                        <div className="flex items-end space-x-1">
-                          <p className="mr-1 font-bold">{comment.username}</p>
-                          {comment.username !== GUEST_NAME && (
-                            <p className="hidden text-sm text-gray-500 sm:inline">
-                              @
-                              {comment.username
-                                .replace(/\s+/g, "")
-                                .toLowerCase()}
-                              &nbsp;
-                              {"･"}
-                            </p>
-                          )}
-                          <ReactTimeago
-                            className="text-sm text-gray-500"
-                            date={comment._createdAt}
-                          />
-                        </div>
+                  <Flipper flipKey={comments} spring="wobbly">
+                    {comments.map((comment, idx) => (
+                      <Flipped key={comment._id} flipId={comment._id}>
+                        <div className="flex space-x-2 mt-1">
+                          <div className="flex flex-col">
+                            <picture>
+                              <img
+                                className="w-12 h-12 mb-1 rounded-full"
+                                src={comment.profileImg}
+                                alt={comment.username}
+                              />
+                            </picture>
+                            {idx !== comments.length - 1 && (
+                              <div className="flex-1 w-[2px] mx-auto bg-gray-400"></div>
+                            )}
+                          </div>
+                          <div>
+                            <div className="flex items-end space-x-1">
+                              <p className="mr-1 font-bold">
+                                {comment.username}
+                              </p>
+                              {comment.username !== GUEST_NAME && (
+                                <p className="hidden text-sm text-gray-500 sm:inline">
+                                  @
+                                  {comment.username
+                                    .replace(/\s+/g, "")
+                                    .toLowerCase()}
+                                  &nbsp;
+                                  {"･"}
+                                </p>
+                              )}
+                              <ReactTimeago
+                                className="text-sm text-gray-500"
+                                date={comment._createdAt}
+                              />
+                            </div>
 
-                        <p className="mb-7 whitespace-pre-wrap">{`${comment.comment}`}</p>
-                      </div>
-                    </div>
-                  ))}
+                            <p className="mb-7 whitespace-pre-wrap">{`${comment.comment}`}</p>
+                          </div>
+                        </div>
+                      </Flipped>
+                    ))}
+                  </Flipper>
                 </div>
               )}
             </div>

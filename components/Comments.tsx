@@ -1,7 +1,7 @@
-import React, { FC, useContext, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { TTweet } from "type";
 import { ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
-import { CommentModalContext } from "./Feed";
+import { CommentModalContext } from "contexts/contexts";
 
 type Props = {
   tweet: TTweet;
@@ -10,6 +10,10 @@ type Props = {
 const Comments: FC<Props> = ({ tweet }) => {
   const { handleOpen } = useContext(CommentModalContext);
   const [count, setCount] = useState<number>(tweet.commentsCount);
+  useEffect(() => {
+    setCount(tweet.commentsCount);
+  }, [tweet.commentsCount]);
+
   return (
     <div
       onClick={() => handleOpen(tweet)}

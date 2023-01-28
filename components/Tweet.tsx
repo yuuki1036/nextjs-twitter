@@ -14,10 +14,9 @@ import Comments from "./Comments";
 
 type Props = {
   tweet: TTweet;
-  setTweets: Dispatch<SetStateAction<TTweet[]>>;
 };
 
-const Tweet: FC<Props> = ({ tweet, setTweets }) => {
+const Tweet: FC<Props> = ({ tweet }) => {
   return (
     <Flipped flipId={tweet._id}>
       <div className="flex flex-col border-y border-gray-100 px-5 py-4">
@@ -52,7 +51,7 @@ const Tweet: FC<Props> = ({ tweet, setTweets }) => {
               />
             </div>
 
-            <p>{tweet.text}</p>
+            <p className="whitespace-pre-wrap">{`${tweet.text}`}</p>
 
             {tweet.image && (
               <picture>
@@ -68,9 +67,9 @@ const Tweet: FC<Props> = ({ tweet, setTweets }) => {
 
         <div className="flex justify-between">
           <Comments tweet={tweet} />
-          <Retweets tweet={tweet} setTweets={setTweets} />
+          <Retweets tweet={tweet} />
           <Likes tweet={tweet} />
-          <div className="flex cursor-pointer items-center space-x-3 text-gray-400">
+          <div className="flex items-center space-x-3 text-gray-400">
             <ArrowUpTrayIcon className="w-5 h-5" />
           </div>
         </div>

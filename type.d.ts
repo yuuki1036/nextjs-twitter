@@ -21,16 +21,16 @@ export interface TTweet extends TTweetBody {
   retweets: string[];
 }
 
-export type TTweetUpdateLikes = {
+export type TUpdateLikesRequest = {
   id: string;
   likes: string[];
   mode: "inc" | "dec";
 };
 
-export type TTweetUpdateRetweets = {
-  id: string;
-  retweets: string[];
-};
+export interface TAddRetweetRequest extends TTweetBody {
+  refId: string;
+  refRetweets: string[];
+}
 
 export interface TComment extends TCommentBody {
   _id: string;

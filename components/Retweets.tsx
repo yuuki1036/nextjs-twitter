@@ -1,50 +1,44 @@
-import React, { Dispatch, FC, SetStateAction, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { TTweet, TTweetBody, TTweetUpdateRetweets } from "type";
+import { TTweet, TTweetBody, TAddRetweetRequest } from "type";
 import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/outline";
 import { fetchTweets } from "utils/fetchTweets";
 import { toast } from "react-hot-toast";
 import { GUEST_NAME } from "lib/constants";
 import cn from "classnames";
+import { FetchTweetContext } from "contexts/contexts";
 
 type Props = {
   tweet: TTweet;
-  setTweets: Dispatch<SetStateAction<TTweet[]>>;
 };
 
-const Retweets: FC<Props> = ({ tweet, setTweets }) => {
+const Retweets: FC<Props> = ({ tweet }) => {
   const { data: session } = useSession();
+  const { setTweets } = useContext(FetchTweetContext);
   const [count, setCount] = useState(tweet.retweetsCount);
   const [retweeted, setRetweeted] = useState<boolean>(
     !!session && tweet.retweets.includes(session?.user?.name || "")
   );
-
-  const increaceRetweet = async () => {
-    setRetweeted(true);
-    setCount(count + 1);
-    tweet.retweets.push(session?.user?.name || "");
-
-    const uniqueRetweets = Array.from(new Set(tweet.retweets));
-
-    const data: TTweetUpdateRetweets = {
-      id: tweet._id,
-      retweets: uniqueRetweets,
-    };
-    await fetch("/api/retweet", {
-      body: JSON.stringify(data),
-      method: "POST",
-    });
-  };
+  useEffect(() => {
+    setCount(tweet.retweetsCount);
+  }, [tweet.retweetsCount]);
 
   const addRetweet = async () => {
-    const data: TTweetBody = {
+    tweet.retweets.push(session?.user?.name || "");
+    const uniqueRetweets = Array.from(new Set(tweet.retweets));
+
+    const data: TAddRetweetRequest = {
+      // add retweet
       text: tweet.text,
       username: tweet.username,
       profileImg: tweet.profileImg,
       image: tweet.image,
       retweeter: session?.user?.name || GUEST_NAME,
+      // update reference tweet
+      refId: tweet._id,
+      refRetweets: uniqueRetweets,
     };
-    await fetch("/api/addRetweet", {
+    await fetch("/api/retweet", {
       body: JSON.stringify(data),
       method: "POST",
     });
@@ -57,8 +51,8 @@ const Retweets: FC<Props> = ({ tweet, setTweets }) => {
 
   const handleClick = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.preventDefault();
-    if (retweeted) return;
-    increaceRetweet();
+    setRetweeted(true);
+    setCount((count) => count + 1);
     const promise = addRetweet();
     toast.promise(promise, {
       loading: <b>投稿中...</b>,

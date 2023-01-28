@@ -1,6 +1,7 @@
-import React, { FC, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
+import { FetchTweetContext } from "contexts/contexts";
+import { TTweet, TUpdateLikesRequest } from "type";
 import { useSession } from "next-auth/react";
-import { TTweet, TTweetUpdateLikes } from "type";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
 import cn from "classnames";
@@ -13,10 +14,14 @@ type TMode = "inc" | "dec";
 
 const Likes: FC<Props> = ({ tweet }) => {
   const { data: session } = useSession();
+  const { refreshFeed } = useContext(FetchTweetContext);
   const [count, setCount] = useState(tweet.likesCount);
   const [liked, setLiked] = useState<boolean>(
     !!session && tweet.likes.includes(session?.user?.name || "")
   );
+  useEffect(() => {
+    setCount(tweet.likesCount);
+  }, [tweet.likesCount]);
 
   const handleClick = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.preventDefault();
@@ -26,18 +31,18 @@ const Likes: FC<Props> = ({ tweet }) => {
     if (liked) {
       // decrement
       setLiked(!liked);
-      setCount(count - 1);
+      setCount((count) => count - 1);
       updateLikes = updateLikes.filter((userName) => userName !== userName);
     } else {
       // increment
       setLiked(!liked);
-      setCount(count + 1);
+      setCount((count) => count + 1);
       updateLikes.push(session?.user?.name || "");
     }
 
     const uniqueLikes = Array.from(new Set(updateLikes));
 
-    const data: TTweetUpdateLikes = {
+    const data: TUpdateLikesRequest = {
       id: tweet._id,
       likes: uniqueLikes,
       mode,
@@ -46,6 +51,8 @@ const Likes: FC<Props> = ({ tweet }) => {
       body: JSON.stringify(data),
       method: "POST",
     });
+
+    refreshFeed();
   };
 
   return (
