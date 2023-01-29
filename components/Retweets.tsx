@@ -64,16 +64,16 @@ const Retweets: FC<Props> = ({ tweet }) => {
   return (
     <div
       onClick={handleClick}
-      className="w-[4rem] flex items-center space-x-1 text-gray-400 cursor-pointer group"
+      className="w-[4rem] flex items-center md:space-x-1 text-gray-500 cursor-pointer group"
     >
       <div className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 ease-out group-hover:text-retweet group-hover:bg-retweet/10">
         <ArrowPathRoundedSquareIcon
-          className={cn("w-5 h-5", { "text-retweet": retweeted })}
+          className={cn("w-4 h-4 md:w-5 md:h-5", { "text-retweet": retweeted })}
         />
       </div>
       <p
         className={cn(
-          "text-sm transition-all duration-200 ease-out group-hover:text-retweet",
+          "text-xs md:text-sm transition-all duration-200 ease-out group-hover:text-retweet",
           { "text-retweet": retweeted }
         )}
       >

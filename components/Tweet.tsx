@@ -18,7 +18,7 @@ type Props = {
 const Tweet: FC<Props> = ({ tweet }) => {
   return (
     <Flipped flipId={tweet._id}>
-      <div className="flex flex-col border-y border-gray-100 px-4 md:px-5 pt-4 pb-2">
+      <div className="flex flex-col border-y border-gray-100 px-4 md:px-5 pt-3 md:pt-4 pb-1 md:pb-2">
         {tweet.tweetType === "retweet" && (
           <div className="flex flex-row items-center mb-[0.15rem] text-sm text-gray-500 font-bold">
             <ArrowPathRoundedSquareIcon className="w-4 h-4 ml-7" />
@@ -29,7 +29,7 @@ const Tweet: FC<Props> = ({ tweet }) => {
         <div className="flex space-x-3">
           <picture>
             <img
-              className="w-12 h-12 rounded-full"
+              className="w-12 h-12 md:w-12 md:h-12 rounded-full"
               src={tweet.profileImg}
               alt={tweet.username}
             />
@@ -67,12 +67,12 @@ const Tweet: FC<Props> = ({ tweet }) => {
           </div>
         </div>
 
-        <div className="flex justify-between">
+        <div className="flex justify-between pl-[3.2rem] md:pl-0">
           <Comments tweet={tweet} />
           <Retweets tweet={tweet} />
           <Likes tweet={tweet} />
-          <div className="flex items-center space-x-3 text-gray-400">
-            <ArrowUpTrayIcon className="w-5 h-5" />
+          <div className="flex items-center space-x-3 text-gray-300">
+            <ArrowUpTrayIcon className="w-4 h-4 md:w-5 md:h-5" />
           </div>
         </div>
       </div>

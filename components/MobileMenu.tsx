@@ -3,11 +3,13 @@ import {
   HomeIcon,
   MagnifyingGlassIcon,
   BellIcon,
-  EnvelopeIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const MobileMenu: FC = () => {
+  const { data: session } = useSession();
   return (
     <div className="fixed bottom-0 z-50 w-screen h-[3.4rem] bg-white md:hidden">
       <hr className="bg-gray-50" />
@@ -24,7 +26,12 @@ const MobileMenu: FC = () => {
           <BellIcon className="w-7 h-7" />
         </div>
         <div className="w-10 h-10 flex items-center justify-center hover:bg-gray-200 rounded-full">
-          <EnvelopeIcon className="w-7 h-7" />
+          <UserIcon
+            onClick={() => {
+              session ? signOut() : signIn();
+            }}
+            className="w-7 h-7"
+          />
         </div>
       </div>
     </div>

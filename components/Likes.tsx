@@ -58,18 +58,18 @@ const Likes: FC<Props> = ({ tweet }) => {
   return (
     <div
       onClick={handleClick}
-      className="w-[4rem] flex items-center space-x-1 text-gray-400 cursor-pointer group"
+      className="w-[4rem] flex items-center md:space-x-1 text-gray-500 cursor-pointer group"
     >
       <div className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 ease-out group-hover:text-like group-hover:bg-like/10">
         {liked ? (
-          <SolidHeartIcon className="w-5 h-5 text-like" />
+          <SolidHeartIcon className="w-4 h-4 md:w-5 md:h-5 text-like" />
         ) : (
-          <HeartIcon className="w-5 h-5" />
+          <HeartIcon className="w-4 h-4 md:w-5 md:h-5" />
         )}
       </div>
       <p
         className={cn(
-          "text-sm transition-all duration-200 ease-out group-hover:text-like",
+          "text-xs md:text-sm transition-all duration-200 ease-out group-hover:text-like",
           { "text-like": liked }
         )}
       >

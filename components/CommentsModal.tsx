@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useContext, useLayoutEffect, useState } from "react";
 import { CommentModalContext, FetchTweetContext } from "contexts/contexts";
 import { TComment, TCommentBody, TTweet } from "type";
 import { GUEST_NAME, GUEST_IMAGE_PATH } from "lib/constants";
@@ -26,7 +26,7 @@ const CommentsModal: FC = () => {
     setComments(comments);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     refreshComments();
   }, []);
 
@@ -37,7 +37,7 @@ const CommentsModal: FC = () => {
       profileImg: userImage,
       tweetId: tweet._id,
     };
-    const result = await fetch("/api/addComment", {
+    await fetch("/api/addComment", {
       body: JSON.stringify(data),
       method: "POST",
     });

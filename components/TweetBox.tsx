@@ -74,7 +74,7 @@ const TweetBox: FC<Props> = ({ setTweets }) => {
   };
 
   return (
-    <div className="flex px-5 py-4 space-x-1 md:space-x-2">
+    <div className="flex px-4 py-4 md:px-5 space-x-1 md:space-x-2">
       <picture>
         <img
           className="w-12 h-12 rounded-full object-cover"
@@ -91,7 +91,7 @@ const TweetBox: FC<Props> = ({ setTweets }) => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="なにかひとことおねがいします..."
-              className="mt-3 mb-1 w-full outline-none md:placeholder:text-xl scrollbar-hide"
+              className="mt-3 mb-2 md:mb-1 w-full outline-none md:placeholder:text-xl scrollbar-hide"
             />
             <div className="flex items-center">
               <div className="flex flex-1">

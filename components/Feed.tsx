@@ -8,6 +8,8 @@ import { fetchTweets } from "utils/fetchTweets";
 import CommentsModal from "./CommentsModal";
 import { toast } from "react-hot-toast";
 import { Flipper } from "react-flip-toolkit";
+import Image from "next/image";
+import logo from "public/logo.png";
 
 type Props = {
   tweets: TTweet[];
@@ -48,11 +50,18 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
         value={{ selectedTweet, handleOpen, handleClose }}
       >
         <div className="col-span-9 md:col-span-7 lg:col-span-5 border-x max-h-screen overflow-scroll scrollbar-hide">
-          <div className="sticky top-0 z-10 px-5 py-3 md:py-4 backdrop-blur-sm bg-white/80 flex items-center justify-between border-y border-gray-100">
-            <h1 className=" text-xl font-bold">Home</h1>
+          <div className="sticky top-0 z-10 px-4 md:px-5 py-3 md:py-4 backdrop-blur-sm bg-white/80 flex items-center justify-between border-y border-gray-100">
+            <h1 className="text-xl font-bold hidden md:block">Home</h1>
+            <Image
+              alt="ひとこと"
+              src={logo}
+              width={40}
+              height={40}
+              className="w-7 h-7 md:hidden"
+            />
             <ArrowPathIcon
               onClick={handleRefresh}
-              className="mr-3 h-8 w-8 cursor-pointer text-twitter transition-all duration-500 ease-out hover:rotate-180 active:scale-125"
+              className="mr-3 w-7 h-7 md:w-8 md:h-8 cursor-pointer text-twitter transition-all duration-500 ease-out hover:rotate-180 active:scale-125"
             />
           </div>
           <div>
