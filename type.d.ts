@@ -1,3 +1,5 @@
+export type TlastCreatedAt = string | null;
+
 export type TTweetBody = {
   text: string;
   username: string;

@@ -110,7 +110,7 @@ const CommentsModal: FC = () => {
                 <p className="mb-7 whitespace-pre-wrap">{`${tweet.text}`}</p>
               </div>
             </div>
-
+            {/* comment form */}
             <form onSubmit={handleSubmit} className="mt-1">
               <div className="flex space-x-2">
                 <picture>
@@ -124,7 +124,6 @@ const CommentsModal: FC = () => {
                   maxRows={10}
                   minRows={3}
                   value={input}
-                  autoFocus={true}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="なにかひとことどうぞ..."
                   className="flex-1 w-full mt-[0.6rem] outline-none md:placeholder:text-xl scrollbar-hide"
@@ -139,57 +138,52 @@ const CommentsModal: FC = () => {
                 </button>
               </div>
             </form>
-
-            <div className="">
+            {/* other comments */}
+            <div>
               {comments?.length > 0 && (
-                <div className="">
+                <Flipper flipKey={comments} spring="wobbly">
                   <hr className="my-4" />
-                  <Flipper flipKey={comments} spring="wobbly">
-                    {comments.map((comment, idx) => (
-                      <Flipped key={comment._id} flipId={comment._id}>
-                        <div className="flex space-x-2 mt-1">
-                          <div className="flex flex-col">
-                            <picture>
-                              <img
-                                className="w-12 h-12 mb-1 rounded-full"
-                                src={comment.profileImg}
-                                alt={comment.username}
-                              />
-                            </picture>
-                            {idx !== comments.length - 1 && (
-                              <div className="flex-1 w-[2px] mx-auto bg-gray-400"></div>
-                            )}
-                          </div>
-                          <div>
-                            <div className="flex items-end space-x-1">
-                              <p className="mr-1 font-bold">
-                                {comment.username}
-                              </p>
-                              {comment.username !== GUEST_NAME ? (
-                                <p className="hidden text-sm text-gray-500 sm:inline">
-                                  @
-                                  {comment.username
-                                    .replace(/\s+/g, "")
-                                    .toLowerCase()}
-                                  &nbsp;
-                                  {"･"}
-                                </p>
-                              ) : (
-                                <span className="mr-1"></span>
-                              )}
-                              <ReactTimeago
-                                className="text-sm text-gray-500"
-                                date={comment._createdAt}
-                              />
-                            </div>
-
-                            <p className="mb-7 whitespace-pre-wrap">{`${comment.comment}`}</p>
-                          </div>
+                  {comments.map((comment, idx) => (
+                    <Flipped key={comment._id} flipId={comment._id}>
+                      <div className="flex space-x-2 mt-1">
+                        <div className="flex flex-col">
+                          <picture>
+                            <img
+                              className="w-12 h-12 mb-1 rounded-full"
+                              src={comment.profileImg}
+                              alt={comment.username}
+                            />
+                          </picture>
+                          {idx !== comments.length - 1 && (
+                            <div className="flex-1 w-[2px] mx-auto bg-gray-400"></div>
+                          )}
                         </div>
-                      </Flipped>
-                    ))}
-                  </Flipper>
-                </div>
+                        <div>
+                          <div className="flex items-end space-x-1">
+                            <p className="mr-1 font-bold">{comment.username}</p>
+                            {comment.username !== GUEST_NAME ? (
+                              <p className="hidden text-sm text-gray-500 sm:inline">
+                                @
+                                {comment.username
+                                  .replace(/\s+/g, "")
+                                  .toLowerCase()}
+                                &nbsp;
+                                {"･"}
+                              </p>
+                            ) : (
+                              <span className="mr-1"></span>
+                            )}
+                            <ReactTimeago
+                              className="text-sm text-gray-500"
+                              date={comment._createdAt}
+                            />
+                          </div>
+                          <p className="mb-7 whitespace-pre-wrap">{`${comment.comment}`}</p>
+                        </div>
+                      </div>
+                    </Flipped>
+                  ))}
+                </Flipper>
               )}
             </div>
           </div>

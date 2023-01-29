@@ -54,8 +54,8 @@ const TweetBox: FC<Props> = ({ setTweets }) => {
       method: "POST",
     });
     // feed更新
-    const newTweets = await fetchTweets();
-    setTweets(newTweets);
+    // const newTweets = await fetchTweets();
+    // setTweets(newTweets);
     return Promise.resolve();
   };
 
