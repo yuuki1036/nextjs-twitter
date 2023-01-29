@@ -4,7 +4,7 @@ import Sidebar from "components/Sidebar";
 import Feed from "components/Feed";
 import Widgets from "components/Widgets";
 import { fetchTweets } from "utils/fetchTweets";
-import { TlastCreatedAt, TTweet } from "type";
+import { TFetchMode, TTweet } from "type";
 import { Toaster } from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import cn from "classnames";
@@ -12,10 +12,10 @@ import MobileMenu from "components/MobileMenu";
 
 type Props = {
   tweets: TTweet[];
-  lastCreatedAt: TlastCreatedAt;
+  begin: string;
 };
 
-const Home: NextPage<Props> = ({ tweets, lastCreatedAt }) => {
+const Home: NextPage<Props> = ({ tweets, begin }) => {
   const { status } = useSession();
 
   return (
@@ -57,7 +57,7 @@ const Home: NextPage<Props> = ({ tweets, lastCreatedAt }) => {
       <main className="mx-auto lg:max-w-6xl max-h-screen overflow-hidden">
         <div className="grid grid-cols-9">
           <Sidebar />
-          <Feed tweets={tweets} lastCreatedAt={lastCreatedAt} />
+          <Feed tweets={tweets} begin={begin} />
           <Widgets />
           <MobileMenu />
         </div>
@@ -69,14 +69,12 @@ const Home: NextPage<Props> = ({ tweets, lastCreatedAt }) => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const date = new Date();
-  const dateString = date.toISOString();
-  console.log(dateString);
-  const { tweets, lastCreatedAt } = await fetchTweets(dateString);
+  const mode: TFetchMode = "init";
+  const { tweets, begin } = await fetchTweets({ mode });
   return {
     props: {
       tweets,
-      lastCreatedAt,
+      begin,
     },
   };
 };

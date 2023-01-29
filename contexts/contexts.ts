@@ -11,7 +11,8 @@ export const CommentModalContext = createContext(
 
 export const FetchTweetContext = createContext(
   {} as {
-    refreshFeed: () => void;
+    fetchNext: () => void;
+    fetchRefresh: () => void;
     setTweets: Dispatch<SetStateAction<TTweet[]>>;
   }
 );

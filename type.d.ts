@@ -1,4 +1,10 @@
-export type TlastCreatedAt = string | null;
+export type TFetchMode = "init" | "next" | "refresh";
+
+export type TFetchQuery = {
+  mode: TFetchMode;
+  begin: string;
+  end: string;
+};
 
 export type TTweetBody = {
   text: string;

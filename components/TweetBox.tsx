@@ -1,4 +1,11 @@
-import React, { Dispatch, FC, SetStateAction, useRef, useState } from "react";
+import React, {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 import { useSession } from "next-auth/react";
 import { TTweet, TTweetBody } from "type";
 import { fetchTweets } from "utils/fetchTweets";
@@ -12,15 +19,14 @@ import {
 } from "@heroicons/react/24/outline";
 import { GUEST_IMAGE_PATH, GUEST_NAME } from "lib/constants";
 import TextareaAutosize from "react-textarea-autosize";
+import { FetchTweetContext } from "contexts/contexts";
 
-type Props = {
-  setTweets: Dispatch<SetStateAction<TTweet[]>>;
-};
-
-const TweetBox: FC<Props> = ({ setTweets }) => {
+const TweetBox: FC = () => {
   const { data: session } = useSession();
   const userName = session?.user?.name || GUEST_NAME;
   const userImage = session?.user?.image || GUEST_IMAGE_PATH;
+
+  const { fetchRefresh } = useContext(FetchTweetContext);
 
   // tweet input
   const [input, setInput] = useState<string>("");
@@ -54,8 +60,7 @@ const TweetBox: FC<Props> = ({ setTweets }) => {
       method: "POST",
     });
     // feed更新
-    // const newTweets = await fetchTweets();
-    // setTweets(newTweets);
+    fetchRefresh();
     return Promise.resolve();
   };
 

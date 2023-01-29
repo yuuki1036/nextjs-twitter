@@ -14,7 +14,7 @@ const CommentsModal: FC = () => {
   const { data: session } = useSession();
   const userName = session?.user?.name || GUEST_NAME;
   const userImage = session?.user?.image || GUEST_IMAGE_PATH;
-  const { refreshFeed } = useContext(FetchTweetContext);
+  const { fetchRefresh } = useContext(FetchTweetContext);
   const { selectedTweet, handleClose } = useContext(CommentModalContext);
   const tweet = selectedTweet as TTweet;
   // comment
@@ -43,7 +43,7 @@ const CommentsModal: FC = () => {
     });
 
     refreshComments();
-    refreshFeed();
+    fetchRefresh();
     return Promise.resolve();
   };
 

@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { TlastCreatedAt, TTweet } from "type";
+import { TFetchQuery, TTweet } from "type";
 import { CommentModalContext, FetchTweetContext } from "contexts/contexts";
 import Tweet from "./Tweet";
 import TweetBox from "./TweetBox";
@@ -11,43 +11,61 @@ import { Flipper } from "react-flip-toolkit";
 import Image from "next/image";
 import logo from "public/logo.png";
 import InfiniteScroll from "react-infinite-scroller";
+import { RotatingLines } from "react-loader-spinner";
 
 type Props = {
   tweets: TTweet[];
-  lastCreatedAt: TlastCreatedAt;
+  begin: string;
 };
 
-const Feed: FC<Props> = ({
-  tweets: tweetsProp,
-  lastCreatedAt: lastCreatedAtProp,
-}) => {
+const Feed: FC<Props> = ({ tweets: tweetsProp, begin: beginProp }) => {
   const [tweets, setTweets] = useState<TTweet[]>(tweetsProp);
-  const [lastCreatedAt, setLastCreatedAt] =
-    useState<TlastCreatedAt>(lastCreatedAtProp);
+  // loading
+  const [begin, setBegin] = useState<string>(beginProp);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  // comment modal
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedTweet, setSelectedTweet] = useState<TTweet | undefined>(
     undefined
   );
-  console.log(lastCreatedAt);
 
-  // CommentModalで使用
+  // for CommentModal
   const handleOpen = (tweet: TTweet) => {
     setSelectedTweet(tweet);
     setModalOpen(true);
   };
   const handleClose = () => setModalOpen(false);
 
-  // feed更新
-  const refreshFeed = async () => {
-    const { tweets: newTweets, lastCreatedAt: newLastCreatedAt } =
-      await fetchTweets(lastCreatedAt);
-    setTweets([...tweets, ...newTweets]);
-    setLastCreatedAt(newLastCreatedAt);
-    console.log(lastCreatedAt);
+  // fetch with scroll
+  const fetchNext = async () => {
+    if (!hasMore) return;
+    const query: TFetchQuery = {
+      mode: "next",
+      begin,
+      end: tweets[tweets.length - 1]._createdAt, // last tweet created time
+    };
+    const { tweets: newTweets, begin: _begin } = await fetchTweets(query);
+    setBegin(_begin);
+    newTweets.length > 0
+      ? setTweets([...tweets, ...newTweets])
+      : setHasMore(false);
     return Promise.resolve();
   };
+  // refresh tweets
+  const fetchRefresh = async () => {
+    const query: TFetchQuery = {
+      mode: "refresh",
+      begin,
+      end: tweets[tweets.length - 1]._createdAt, // last tweet created time
+    };
+    const { tweets: newTweets, begin: _begin } = await fetchTweets(query);
+    setBegin(_begin);
+    setTweets([...newTweets, ...tweets]);
+    return Promise.resolve();
+  };
+
   const handleRefresh = async () => {
-    const promise = refreshFeed();
+    const promise = fetchRefresh();
     toast.promise(promise, {
       loading: <b>更新中...</b>,
       success: <b>フィードを更新しました！</b>,
@@ -56,16 +74,23 @@ const Feed: FC<Props> = ({
   };
 
   return (
-    <FetchTweetContext.Provider value={{ refreshFeed, setTweets }}>
+    <FetchTweetContext.Provider value={{ fetchNext, fetchRefresh, setTweets }}>
       <CommentModalContext.Provider
         value={{ selectedTweet, handleOpen, handleClose }}
       >
         <div className="col-span-9 md:col-span-7 lg:col-span-5 border-x max-h-screen overflow-scroll scrollbar-hide">
           <InfiniteScroll
-            pageStart={0}
-            loadMore={refreshFeed}
+            loadMore={fetchNext}
+            hasMore={hasMore}
             useWindow={false}
-            hasMore={true}
+            loader={
+              <div
+                key={0}
+                className="w-full h-20 flex items-center justify-center"
+              >
+                <RotatingLines strokeColor="#00ADED" width="40" />
+              </div>
+            }
           >
             <div className="sticky top-0 z-10 px-4 md:px-5 py-3 md:py-4 backdrop-blur-sm bg-white/80 flex items-center justify-between border-y border-gray-100">
               <h1 className="text-xl font-bold hidden md:block">Home</h1>
@@ -82,7 +107,7 @@ const Feed: FC<Props> = ({
               />
             </div>
             <div>
-              <TweetBox setTweets={setTweets} />
+              <TweetBox />
             </div>
 
             <div>

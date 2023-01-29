@@ -14,7 +14,7 @@ type Props = {
 
 const Retweets: FC<Props> = ({ tweet }) => {
   const { data: session } = useSession();
-  const { setTweets } = useContext(FetchTweetContext);
+  const { fetchRefresh } = useContext(FetchTweetContext);
   const [count, setCount] = useState(tweet.retweetsCount);
   const [retweeted, setRetweeted] = useState<boolean>(
     !!session && tweet.retweets.includes(session?.user?.name || "")
@@ -43,8 +43,7 @@ const Retweets: FC<Props> = ({ tweet }) => {
       method: "POST",
     });
 
-    const newTweets = await fetchTweets();
-    setTweets(newTweets);
+    fetchRefresh();
 
     return Promise.resolve();
   };

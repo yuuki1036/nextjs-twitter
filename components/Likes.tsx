@@ -14,7 +14,7 @@ type TMode = "inc" | "dec";
 
 const Likes: FC<Props> = ({ tweet }) => {
   const { data: session } = useSession();
-  const { refreshFeed } = useContext(FetchTweetContext);
+  const { fetchRefresh } = useContext(FetchTweetContext);
   const [count, setCount] = useState(tweet.likesCount);
   const [liked, setLiked] = useState<boolean>(
     !!session && tweet.likes.includes(session?.user?.name || "")
@@ -52,7 +52,7 @@ const Likes: FC<Props> = ({ tweet }) => {
       method: "POST",
     });
 
-    refreshFeed();
+    fetchRefresh();
   };
 
   return (
