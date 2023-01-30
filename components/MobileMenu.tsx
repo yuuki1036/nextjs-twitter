@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import MobileMenuRow from "./MobileMenuRow";
 import {
   HomeIcon,
   MagnifyingGlassIcon,
@@ -10,29 +11,17 @@ import {
 
 const MobileMenu: FC = () => {
   const { data: session } = useSession();
+
   return (
-    <div className="fixed bottom-0 z-50 w-screen h-[3.4rem] bg-white md:hidden">
+    <div className="fixed bottom-0 z-50 w-screen h-[3.2rem] bg-white md:hidden">
       <hr className="bg-gray-50" />
       <div className="h-full flex items-center justify-between px-6">
         <Link href="/">
-          <div className="w-10 h-10 flex items-center justify-center hover:bg-gray-200 rounded-full">
-            <HomeIcon className="w-7 h-7" />
-          </div>
+          <MobileMenuRow Icon={HomeIcon} />
         </Link>
-        <div className="w-10 h-10 flex items-center justify-center hover:bg-gray-200 rounded-full">
-          <MagnifyingGlassIcon className="w-7 h-7" />
-        </div>
-        <div className="w-10 h-10 flex items-center justify-center hover:bg-gray-200 rounded-full">
-          <BellIcon className="w-7 h-7" />
-        </div>
-        <div className="w-10 h-10 flex items-center justify-center hover:bg-gray-200 rounded-full">
-          <UserIcon
-            onClick={() => {
-              session ? signOut() : signIn();
-            }}
-            className="w-7 h-7"
-          />
-        </div>
+        <MobileMenuRow Icon={MagnifyingGlassIcon} />
+        <MobileMenuRow Icon={BellIcon} />
+        <MobileMenuRow Icon={UserIcon} onClick={session ? signOut : signIn} />
       </div>
     </div>
   );

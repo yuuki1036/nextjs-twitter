@@ -67,7 +67,7 @@ const Tweet: FC<Props> = ({ tweet }) => {
           </div>
         </div>
         {/* tweet status */}
-        <div className="flex justify-between pl-[3.2rem] md:pr-[4.5rem]">
+        <div className="flex justify-between pl-[3.2rem] md:pr-[6.4rem]">
           <Comments tweet={tweet} />
           <Retweets tweet={tweet} />
           <Likes tweet={tweet} />
