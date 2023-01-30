@@ -20,7 +20,7 @@ type Props = {
 const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
   const [tweets, setTweets] = useState<TTweet[]>(tweetsProp);
   // scroll fetch status
-  const [hasMore, setHasMore] = useState<boolean>(tweets.length > 10);
+  const [hasMore, setHasMore] = useState<boolean>(true);
   // for comment modal
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedTweet, setSelectedTweet] = useState<TTweet | undefined>(
