@@ -13,7 +13,7 @@ const MobileMenu: FC = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="fixed bottom-0 z-50 w-screen h-[3.2rem] bg-white md:hidden">
+    <div className="sticky bottom-0 z-50 w-screen h-[3.2rem] bg-white md:hidden">
       <hr className="bg-gray-50" />
       <div className="h-full flex items-center justify-between px-6">
         <Link href="/">
