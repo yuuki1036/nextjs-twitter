@@ -39,6 +39,7 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
   const fetchNext = async () => {
     if (!hasMore) return;
     const mode: TFetchMode = "next";
+    console.log("next...");
     const { tweets: _tweets } = await fetchTweets(mode, tweets);
     if (_tweets.length > 0) {
       // set tweets at the end
@@ -53,6 +54,7 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
   // fetch latest tweets
   const fetchUpdate = async () => {
     const mode: TFetchMode = "update";
+    console.log("update...");
     const { tweets: _tweets } = await fetchTweets(mode, tweets);
     // set tweets at the top
     setTweets([..._tweets, ...tweets]);
@@ -62,6 +64,7 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
   // refresh tweets
   const fetchRefresh = async () => {
     const mode: TFetchMode = "refresh";
+    console.log("refresh...");
     const { tweets: _tweets } = await fetchTweets(mode, tweets);
     // replace all tweets
     setTweets([..._tweets]);
