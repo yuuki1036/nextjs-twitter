@@ -1,6 +1,6 @@
 import React, { FC, useContext, useEffect, useState } from "react";
-import { FetchTweetContext } from "contexts/contexts";
 import { TTweet, TUpdateLikesRequest } from "type";
+import { FetchTweetContext } from "contexts/contexts";
 import { useSession } from "next-auth/react";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
@@ -51,7 +51,7 @@ const Likes: FC<Props> = ({ tweet }) => {
       body: JSON.stringify(data),
       method: "POST",
     });
-
+    // refresh feed
     fetchRefresh();
   };
 

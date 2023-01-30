@@ -1,12 +1,11 @@
 import React, { FC, useContext, useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import { TTweet, TTweetBody, TAddRetweetRequest } from "type";
-import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/outline";
-import { fetchTweets } from "utils/fetchTweets";
-import { toast } from "react-hot-toast";
-import { GUEST_NAME } from "lib/constants";
-import cn from "classnames";
+import { TTweet, TAddRetweetRequest } from "type";
 import { FetchTweetContext } from "contexts/contexts";
+import { GUEST_NAME } from "lib/constants";
+import { useSession } from "next-auth/react";
+import { toast } from "react-hot-toast";
+import cn from "classnames";
+import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/outline";
 
 type Props = {
   tweet: TTweet;
@@ -14,7 +13,7 @@ type Props = {
 
 const Retweets: FC<Props> = ({ tweet }) => {
   const { data: session } = useSession();
-  const { fetchRefresh } = useContext(FetchTweetContext);
+  const { fetchUpdate } = useContext(FetchTweetContext);
   const [count, setCount] = useState(tweet.retweetsCount);
   const [retweeted, setRetweeted] = useState<boolean>(
     !!session && tweet.retweets.includes(session?.user?.name || "")
@@ -42,9 +41,8 @@ const Retweets: FC<Props> = ({ tweet }) => {
       body: JSON.stringify(data),
       method: "POST",
     });
-
-    fetchRefresh();
-
+    // update feed
+    fetchUpdate();
     return Promise.resolve();
   };
 

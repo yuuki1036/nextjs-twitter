@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { TFetchQuery, TTweet } from "type";
+import { TFetchMode, TFetchQuery, TTweet } from "type";
 import { CommentModalContext, FetchTweetContext } from "contexts/contexts";
 import Tweet from "./Tweet";
 import TweetBox from "./TweetBox";
@@ -15,21 +15,19 @@ import { RotatingLines } from "react-loader-spinner";
 
 type Props = {
   tweets: TTweet[];
-  begin: string;
 };
 
-const Feed: FC<Props> = ({ tweets: tweetsProp, begin: beginProp }) => {
+const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
   const [tweets, setTweets] = useState<TTweet[]>(tweetsProp);
-  // loading
-  const [begin, setBegin] = useState<string>(beginProp);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  // fetch status
+  const [hasMore, setHasMore] = useState<boolean>(tweets.length > 10);
   // comment modal
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedTweet, setSelectedTweet] = useState<TTweet | undefined>(
     undefined
   );
 
-  // for CommentModal
+  // for CommentModalContext
   const handleOpen = (tweet: TTweet) => {
     setSelectedTweet(tweet);
     setModalOpen(true);
@@ -39,31 +37,27 @@ const Feed: FC<Props> = ({ tweets: tweetsProp, begin: beginProp }) => {
   // fetch with scroll
   const fetchNext = async () => {
     if (!hasMore) return;
-    const query: TFetchQuery = {
-      mode: "next",
-      begin,
-      end: tweets[tweets.length - 1]._createdAt, // last tweet created time
-    };
-    const { tweets: newTweets, begin: _begin } = await fetchTweets(query);
-    setBegin(_begin);
-    newTweets.length > 0
-      ? setTweets([...tweets, ...newTweets])
-      : setHasMore(false);
+    const mode: TFetchMode = "next";
+    const { tweets: _tweets } = await fetchTweets(mode, tweets);
+    _tweets.length > 0 ? setTweets([...tweets, ..._tweets]) : setHasMore(false);
+    return Promise.resolve();
+  };
+  // fetch latest tweets
+  const fetchUpdate = async () => {
+    const mode: TFetchMode = "update";
+    const { tweets: _tweets } = await fetchTweets(mode, tweets);
+    setTweets([..._tweets, ...tweets]);
     return Promise.resolve();
   };
   // refresh tweets
   const fetchRefresh = async () => {
-    const query: TFetchQuery = {
-      mode: "refresh",
-      begin,
-      end: tweets[tweets.length - 1]._createdAt, // last tweet created time
-    };
-    const { tweets: newTweets, begin: _begin } = await fetchTweets(query);
-    setBegin(_begin);
-    setTweets([...newTweets, ...tweets]);
+    const mode: TFetchMode = "refresh";
+    const { tweets: _tweets } = await fetchTweets(mode, tweets);
+    setTweets([..._tweets]);
     return Promise.resolve();
   };
 
+  // click reflesh button
   const handleRefresh = async () => {
     const promise = fetchRefresh();
     toast.promise(promise, {
@@ -74,7 +68,9 @@ const Feed: FC<Props> = ({ tweets: tweetsProp, begin: beginProp }) => {
   };
 
   return (
-    <FetchTweetContext.Provider value={{ fetchNext, fetchRefresh, setTweets }}>
+    <FetchTweetContext.Provider
+      value={{ fetchNext, fetchUpdate, fetchRefresh }}
+    >
       <CommentModalContext.Provider
         value={{ selectedTweet, handleOpen, handleClose }}
       >

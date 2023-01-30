@@ -8,7 +8,7 @@ export default defineConfig({
   title: 'hitokoto',
 
   projectId: 'ffcv0j48',
-  dataset: 'production',
+  dataset: 'develop',
 
   plugins: [deskTool(), visionTool()],
 

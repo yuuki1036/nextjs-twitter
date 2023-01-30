@@ -1,14 +1,9 @@
-import React, {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useContext,
-  useRef,
-  useState,
-} from "react";
+import React, { FC, useContext, useRef, useState } from "react";
+import { TTweetBody } from "type";
+import { FetchTweetContext } from "contexts/contexts";
+import { GUEST_IMAGE_PATH, GUEST_NAME } from "lib/constants";
 import { useSession } from "next-auth/react";
-import { TTweet, TTweetBody } from "type";
-import { fetchTweets } from "utils/fetchTweets";
+import TextareaAutosize from "react-textarea-autosize";
 import { toast } from "react-hot-toast";
 import {
   CalendarIcon,
@@ -17,16 +12,13 @@ import {
   MapPinIcon,
   PhotoIcon,
 } from "@heroicons/react/24/outline";
-import { GUEST_IMAGE_PATH, GUEST_NAME } from "lib/constants";
-import TextareaAutosize from "react-textarea-autosize";
-import { FetchTweetContext } from "contexts/contexts";
 
 const TweetBox: FC = () => {
   const { data: session } = useSession();
   const userName = session?.user?.name || GUEST_NAME;
   const userImage = session?.user?.image || GUEST_IMAGE_PATH;
 
-  const { fetchRefresh } = useContext(FetchTweetContext);
+  const { fetchUpdate } = useContext(FetchTweetContext);
 
   // tweet input
   const [input, setInput] = useState<string>("");
@@ -47,7 +39,7 @@ const TweetBox: FC = () => {
     setIsImageUrlBoxOpen(false);
   };
 
-  const postTweet = async () => {
+  const addTweet = async () => {
     const data: TTweetBody = {
       text: input,
       username: userName,
@@ -59,14 +51,14 @@ const TweetBox: FC = () => {
       body: JSON.stringify(data),
       method: "POST",
     });
-    // feed更新
-    fetchRefresh();
+    // update feed
+    fetchUpdate();
     return Promise.resolve();
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const promise = postTweet();
+    const promise = addTweet();
     toast.promise(promise, {
       loading: <b>投稿中...</b>,
       success: <b>ひとことしました！</b>,

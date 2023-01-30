@@ -1,4 +1,4 @@
-export type TFetchMode = "init" | "next" | "refresh";
+export type TFetchMode = "init" | "next" | "update" | "refresh";
 
 export type TFetchQuery = {
   mode: TFetchMode;

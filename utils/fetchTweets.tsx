@@ -1,28 +1,18 @@
 import { TFetchMode, TTweet } from "type";
 
-type Props = {
-  mode: TFetchMode;
-  begin?: string;
-  end?: string;
-};
-
-export const fetchTweets = async ({ mode, begin = "", end = "" }: Props) => {
+export const fetchTweets = async (
+  mode: TFetchMode = "init",
+  tweets: TTweet[] = []
+) => {
   const _Date = new Date();
+  const length = tweets.length;
+  const latest = length > 0 ? tweets[0]._createdAt : _Date.toISOString();
+  const oldest = length > 0 ? tweets[length - 1]._createdAt : "";
 
-  switch (mode) {
-    case "init":
-      begin = _Date.toISOString();
-      break;
-    case "next":
-      break;
-    case "refresh":
-      break;
-  }
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/getTweets?mode=${mode}&begin=${begin}&end=${end}`
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/getTweets?mode=${mode}&latest=${latest}&oldest=${oldest}`
   );
   const data = await res.json();
-  const tweets: TTweet[] = data.tweets;
-  const _begin = data.begin;
-  return { tweets, begin: _begin };
+  const _tweets: TTweet[] = data.tweets;
+  return { tweets: _tweets };
 };

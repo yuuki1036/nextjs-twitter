@@ -12,10 +12,9 @@ import MobileMenu from "components/MobileMenu";
 
 type Props = {
   tweets: TTweet[];
-  begin: string;
 };
 
-const Home: NextPage<Props> = ({ tweets, begin }) => {
+const Home: NextPage<Props> = ({ tweets }) => {
   const { status } = useSession();
 
   return (
@@ -57,7 +56,7 @@ const Home: NextPage<Props> = ({ tweets, begin }) => {
       <main className="mx-auto lg:max-w-6xl max-h-screen overflow-hidden">
         <div className="grid grid-cols-9">
           <Sidebar />
-          <Feed tweets={tweets} begin={begin} />
+          <Feed tweets={tweets} />
           <Widgets />
           <MobileMenu />
         </div>
@@ -69,12 +68,11 @@ const Home: NextPage<Props> = ({ tweets, begin }) => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const mode: TFetchMode = "init";
-  const { tweets, begin } = await fetchTweets({ mode });
+  // initial fetch
+  const { tweets } = await fetchTweets();
   return {
     props: {
       tweets,
-      begin,
     },
   };
 };

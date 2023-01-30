@@ -1,22 +1,28 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { groq } from "next-sanity";
 import { TFetchMode, TTweet } from "type";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { client } from "sanity";
+import { groq } from "next-sanity";
 
 const initQuery = groq`
-*[_type == 'tweet' && !blockTweet && _createdAt <= $begin] | order(_createdAt desc) [0...10] {
+*[_type == 'tweet' && !blockTweet && _createdAt <= $latest] | order(_createdAt desc) [0...10] {
   _id,
     ...
 }
 `;
 const nextQuery = groq`
-*[_type == 'tweet' && !blockTweet && _createdAt < $end] | order(_createdAt desc) [0...10] {
+*[_type == 'tweet' && !blockTweet && _createdAt < $oldest] | order(_createdAt desc) [0...10] {
+  _id,
+    ...
+}
+`;
+const updateQuery = groq`
+*[_type == 'tweet' && !blockTweet && _createdAt > $latest] | order(_createdAt desc) {
   _id,
     ...
 }
 `;
 const refreshQuery = groq`
-*[_type == 'tweet' && !blockTweet && _createdAt > $begin] | order(_createdAt desc) {
+*[_type == 'tweet' && !blockTweet && $latest >= _createdAt && _createdAt >= $oldest] | order(_createdAt desc) {
   _id,
     ...
 }
@@ -24,36 +30,37 @@ const refreshQuery = groq`
 
 type TQuery = {
   mode: TFetchMode;
-  begin: string;
-  end: string;
+  latest: string;
+  oldest: string;
 };
 
 type Data = {
   tweets: TTweet[];
-  begin: string;
 };
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const { mode, begin, end } = req.query as unknown as TQuery;
+  const { mode, latest, oldest } = req.query as unknown as TQuery;
   let tweets: TTweet[] = [];
   switch (mode) {
     case "init":
-      tweets = await client.fetch(initQuery, { begin });
-      console.log("init", begin, "〜");
+      tweets = await client.fetch(initQuery, { latest });
+      console.log("initial fetch from", latest);
       break;
     case "next":
-      tweets = await client.fetch(nextQuery, { end });
-      console.log("next", end, "〜");
+      tweets = await client.fetch(nextQuery, { oldest });
+      console.log("next fetch after", oldest);
+      break;
+    case "update":
+      tweets = await client.fetch(updateQuery, { latest });
+      console.log("update fetch latest from", latest);
       break;
     case "refresh":
-      tweets = await client.fetch(refreshQuery, { begin });
-      console.log("refresh", "now 〜", begin);
+      tweets = await client.fetch(refreshQuery, { latest, oldest });
+      console.log("refresh fetch between", latest, "~", oldest);
       break;
   }
-  const _Date = new Date();
-  const updateBegin = mode === "refresh" ? _Date.toISOString() : begin;
-  res.status(200).json({ tweets, begin: updateBegin });
+  res.status(200).json({ tweets });
 }
