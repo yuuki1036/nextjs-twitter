@@ -19,7 +19,7 @@ const Home: NextPage<Props> = ({ tweets }) => {
         <title>ひとこと</title>
       </Head>
       <Toaster />
-      <main className="mx-auto lg:max-w-6xl max-h-screen overflow-hidden">
+      <main className="mx-auto lg:max-w-6xl min-h-screen overflow-hidden">
         {status === "loading" ? (
           <div className="fixed w-screen h-screen z-50"></div>
         ) : (

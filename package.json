@@ -34,6 +34,7 @@
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.3",
     "postcss": "^8.4.21",
+    "postcss-100vh-fix": "^1.0.2",
     "react-infinite-scroller": "^1.2.6",
     "react-loader-spinner": "^5.3.4",
     "react-twitter-embed": "^4.0.4",
