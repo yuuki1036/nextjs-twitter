@@ -87,7 +87,7 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
       <CommentModalContext.Provider
         value={{ selectedTweet, handleOpen, handleClose }}
       >
-        <div className="col-span-9 md:col-span-7 lg:col-span-5 border-x max-h-screen overflow-scroll scrollbar-hide">
+        <div className="col-span-9 md:col-span-7 lg:col-span-5 border-x max-h-[calc(100vh-3.2rem)] md:max-h-screen overflow-scroll scrollbar-hide">
           <InfiniteScroll
             loadMore={fetchNext}
             hasMore={hasMore}
