@@ -1,4 +1,4 @@
-import { SVGProps } from "react";
+import { FC, SVGProps } from "react";
 
 type Props = {
   Icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
@@ -6,7 +6,7 @@ type Props = {
   onClick?: () => {};
 };
 
-const SidebarRow = ({ Icon, title, onClick }: Props) => {
+const SidebarRow: FC<Props> = ({ Icon, title, onClick }) => {
   return (
     <div
       onClick={() => {

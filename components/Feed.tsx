@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { TFetchMode, TFetchQuery, TTweet } from "type";
+import { TFetchMode, TTweet } from "type";
 import { CommentModalContext, FetchTweetContext } from "contexts/contexts";
 import Tweet from "./Tweet";
 import TweetBox from "./TweetBox";
@@ -19,9 +19,9 @@ type Props = {
 
 const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
   const [tweets, setTweets] = useState<TTweet[]>(tweetsProp);
-  // fetch status
+  // scroll fetch status
   const [hasMore, setHasMore] = useState<boolean>(tweets.length > 10);
-  // comment modal
+  // for comment modal
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedTweet, setSelectedTweet] = useState<TTweet | undefined>(
     undefined
@@ -32,6 +32,7 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
     setSelectedTweet(tweet);
     setModalOpen(true);
   };
+
   const handleClose = () => setModalOpen(false);
 
   // fetch with scroll
@@ -39,25 +40,34 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
     if (!hasMore) return;
     const mode: TFetchMode = "next";
     const { tweets: _tweets } = await fetchTweets(mode, tweets);
-    _tweets.length > 0 ? setTweets([...tweets, ..._tweets]) : setHasMore(false);
+    if (_tweets.length > 0) {
+      // set tweets at the end
+      setTweets([...tweets, ..._tweets]);
+    } else {
+      // fetched all tweets
+      setHasMore(false);
+    }
     return Promise.resolve();
   };
+
   // fetch latest tweets
   const fetchUpdate = async () => {
     const mode: TFetchMode = "update";
     const { tweets: _tweets } = await fetchTweets(mode, tweets);
+    // set tweets at the top
     setTweets([..._tweets, ...tweets]);
     return Promise.resolve();
   };
+
   // refresh tweets
   const fetchRefresh = async () => {
     const mode: TFetchMode = "refresh";
     const { tweets: _tweets } = await fetchTweets(mode, tweets);
+    // replace all tweets
     setTweets([..._tweets]);
     return Promise.resolve();
   };
 
-  // click reflesh button
   const handleRefresh = async () => {
     const promise = fetchRefresh();
     toast.promise(promise, {
@@ -88,6 +98,7 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
               </div>
             }
           >
+            {/* top sticky area */}
             <div className="sticky top-0 z-10 px-4 md:px-5 py-3 md:py-4 backdrop-blur-sm bg-white/80 flex items-center justify-between border-y border-gray-100">
               <h1 className="text-xl font-bold hidden md:block">Home</h1>
               <Image
@@ -102,10 +113,11 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
                 className="mr-3 w-7 h-7 md:w-8 md:h-8 cursor-pointer text-twitter transition-all duration-500 ease-out hover:rotate-180 active:scale-125"
               />
             </div>
+            {/* tweet form */}
             <div>
               <TweetBox />
             </div>
-
+            {/* fetched tweets */}
             <div>
               <Flipper flipKey={tweets} spring="wobbly">
                 {tweets.map((tweet) => (
@@ -113,9 +125,10 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
                 ))}
               </Flipper>
             </div>
-            {modalOpen && <CommentsModal />}
           </InfiniteScroll>
         </div>
+        {/* comment modal window */}
+        {modalOpen && <CommentsModal />}
       </CommentModalContext.Provider>
     </FetchTweetContext.Provider>
   );

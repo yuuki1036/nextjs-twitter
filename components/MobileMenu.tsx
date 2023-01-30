@@ -1,12 +1,12 @@
-import React, { FC } from "react";
+import { FC } from "react";
+import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import {
   HomeIcon,
   MagnifyingGlassIcon,
   BellIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
 
 const MobileMenu: FC = () => {
   const { data: session } = useSession();

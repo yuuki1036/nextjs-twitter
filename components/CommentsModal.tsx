@@ -1,6 +1,6 @@
-import React, { FC, useContext, useLayoutEffect, useState } from "react";
-import { CommentModalContext, FetchTweetContext } from "contexts/contexts";
+import { FC, useContext, useLayoutEffect, useState } from "react";
 import { TComment, TCommentBody, TTweet } from "type";
+import { CommentModalContext, FetchTweetContext } from "contexts/contexts";
 import { GUEST_NAME, GUEST_IMAGE_PATH } from "lib/constants";
 import { useSession } from "next-auth/react";
 import { fetchComments } from "utils/fetchComments";
@@ -41,8 +41,9 @@ const CommentsModal: FC = () => {
       body: JSON.stringify(data),
       method: "POST",
     });
-
+    // update comments
     refreshComments();
+    // refresh background feed
     fetchRefresh();
     return Promise.resolve();
   };
@@ -64,7 +65,9 @@ const CommentsModal: FC = () => {
       onClick={() => handleClose()}
       className="fixed inset-0 z-10 flex items-center justify-center bg-black/40"
     >
+      {/* modal body */}
       <div className="w-full max-w-lg mx-3 md:mx-0 rounded-xl bg-white py-2 pl-1 pr-2 pt-0">
+        {/* sticky top area  */}
         <div
           onClick={(e) => e.stopPropagation()}
           className="max-h-[80vh] overflow-y-scroll rounded-xl"
@@ -77,8 +80,9 @@ const CommentsModal: FC = () => {
               <XMarkIcon className="w-[1.4rem] h-[1.4rem]" />
             </div>
           </div>
-
+          {/* content */}
           <div className="p-2">
+            {/* quoted tweet */}
             <div className="flex space-x-2">
               <div className="flex flex-col">
                 <picture>

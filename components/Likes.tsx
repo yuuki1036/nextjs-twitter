@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { TTweet, TUpdateLikesRequest } from "type";
 import { FetchTweetContext } from "contexts/contexts";
 import { useSession } from "next-auth/react";

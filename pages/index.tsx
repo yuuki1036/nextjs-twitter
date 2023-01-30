@@ -1,14 +1,14 @@
+import { TTweet } from "type";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
+import { useSession } from "next-auth/react";
 import Sidebar from "components/Sidebar";
 import Feed from "components/Feed";
 import Widgets from "components/Widgets";
-import { fetchTweets } from "utils/fetchTweets";
-import { TFetchMode, TTweet } from "type";
-import { Toaster } from "react-hot-toast";
-import { useSession } from "next-auth/react";
-import cn from "classnames";
 import MobileMenu from "components/MobileMenu";
+import { fetchTweets } from "utils/fetchTweets";
+import { Toaster } from "react-hot-toast";
+import cn from "classnames";
 
 type Props = {
   tweets: TTweet[];
@@ -16,36 +16,10 @@ type Props = {
 
 const Home: NextPage<Props> = ({ tweets }) => {
   const { status } = useSession();
-
   return (
     <>
       <Head>
         <title>ひとこと</title>
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="favicon/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="favicon/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="favicon/favicon-16x16.png"
-        />
-        <link rel="manifest" href="favicon/site.webmanifest" />
-        <link
-          rel="mask-icon"
-          href="favicon/safari-pinned-tab.svg"
-          color="#5bbad5"
-        />
-        <meta name="msapplication-TileColor" content="#da532c" />
-        <meta name="theme-color" content="#ffffff"></meta>
       </Head>
       <Toaster />
       <div

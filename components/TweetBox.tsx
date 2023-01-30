@@ -1,4 +1,4 @@
-import React, { FC, useContext, useRef, useState } from "react";
+import { FC, useContext, useRef, useState } from "react";
 import { TTweetBody } from "type";
 import { FetchTweetContext } from "contexts/contexts";
 import { GUEST_IMAGE_PATH, GUEST_NAME } from "lib/constants";

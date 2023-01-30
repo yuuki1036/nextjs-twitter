@@ -45,19 +45,19 @@ export default async function handler(
   const { mode, latest, oldest } = req.query as unknown as TQuery;
   let tweets: TTweet[] = [];
   switch (mode) {
-    case "init":
+    case "init": // first fetch when starting app
       tweets = await client.fetch(initQuery, { latest });
       console.log("initial fetch from", latest);
       break;
-    case "next":
+    case "next": // fetch next tweets
       tweets = await client.fetch(nextQuery, { oldest });
       console.log("next fetch after", oldest);
       break;
-    case "update":
+    case "update": // fetch only latest tweets
       tweets = await client.fetch(updateQuery, { latest });
       console.log("update fetch latest from", latest);
       break;
-    case "refresh":
+    case "refresh": // refresh tweets in feed
       tweets = await client.fetch(refreshQuery, { latest, oldest });
       console.log("refresh fetch between", latest, "~", oldest);
       break;

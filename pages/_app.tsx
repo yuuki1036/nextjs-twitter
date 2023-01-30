@@ -4,7 +4,7 @@ import { AppProps } from "next/app";
 import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
-function MyApp({
+export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session }>) {
@@ -14,4 +14,3 @@ function MyApp({
     </SessionProvider>
   );
 }
-export default MyApp;

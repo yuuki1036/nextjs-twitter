@@ -6,7 +6,9 @@ export const fetchTweets = async (
 ) => {
   const _Date = new Date();
   const length = tweets.length;
+  // date of latest post in feed
   const latest = length > 0 ? tweets[0]._createdAt : _Date.toISOString();
+  // date of oldest post in feed
   const oldest = length > 0 ? tweets[length - 1]._createdAt : "";
 
   const res = await fetch(

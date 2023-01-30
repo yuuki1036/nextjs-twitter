@@ -1,7 +1,7 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { TTweet } from "type";
-import { ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
 import { CommentModalContext } from "contexts/contexts";
+import { ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
 
 type Props = {
   tweet: TTweet;

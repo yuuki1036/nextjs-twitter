@@ -1,5 +1,5 @@
-import { createContext, Dispatch, SetStateAction } from "react";
 import { TTweet } from "type";
+import { createContext } from "react";
 
 export const CommentModalContext = createContext(
   {} as {

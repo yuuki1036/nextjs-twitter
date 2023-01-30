@@ -19,6 +19,7 @@ const Tweet: FC<Props> = ({ tweet }) => {
   return (
     <Flipped flipId={tweet._id}>
       <div className="flex flex-col border-y border-gray-100 px-4 md:px-5 pt-3 md:pt-4 pb-1 md:pb-2">
+        {/* retweet status */}
         {tweet.tweetType === "retweet" && (
           <div className="flex flex-row items-center mb-[0.15rem] text-sm text-gray-500 font-bold">
             <ArrowPathRoundedSquareIcon className="w-4 h-4 ml-7" />
@@ -26,6 +27,7 @@ const Tweet: FC<Props> = ({ tweet }) => {
             <p className="">がもうひとこと！</p>
           </div>
         )}
+        {/* tweet body */}
         <div className="flex space-x-3">
           <picture>
             <img
@@ -34,7 +36,6 @@ const Tweet: FC<Props> = ({ tweet }) => {
               alt={tweet.username}
             />
           </picture>
-
           <div className="flex-1">
             <div className="flex items-end">
               <p className="mr-1 font-bold">{tweet.username}</p>
@@ -46,15 +47,14 @@ const Tweet: FC<Props> = ({ tweet }) => {
               ) : (
                 <span className="mr-1"></span>
               )}
-
               <ReactTimeago
                 className="text-sm text-gray-500"
                 date={tweet._createdAt}
               />
             </div>
-
+            {/* tweet text */}
             <p className="mb-2 whitespace-pre-wrap">{`${tweet.text}`}</p>
-
+            {/* tweet image */}
             {tweet.image && (
               <picture>
                 <img
@@ -66,7 +66,7 @@ const Tweet: FC<Props> = ({ tweet }) => {
             )}
           </div>
         </div>
-
+        {/* tweet status */}
         <div className="flex justify-between pl-[3.2rem] md:pl-0">
           <Comments tweet={tweet} />
           <Retweets tweet={tweet} />

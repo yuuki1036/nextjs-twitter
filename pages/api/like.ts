@@ -1,6 +1,6 @@
-import { fetchSanity } from "lib/fetchSanity";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { TUpdateLikesRequest } from "type";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { fetchSanity } from "lib/fetchSanity";
 
 type Data = {
   message: string;

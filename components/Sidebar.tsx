@@ -1,6 +1,9 @@
+import { FC } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
 import SidebarRow from "./SidebarRow";
-
+import logo from "public/logo.png";
 import {
   HomeIcon,
   HashtagIcon,
@@ -11,15 +14,12 @@ import {
   UserIcon,
   EllipsisHorizontalCircleIcon,
 } from "@heroicons/react/24/outline";
-import Image from "next/image";
-import logo from "public/logo.png";
-import Link from "next/link";
 
-const Sidebar = () => {
+const Sidebar: FC = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="hidden md:block col-span-1 md:col-span-2 flex flex-col items-center px-4 md:items-start  ">
+    <div className="hidden md:flex col-span-1 md:col-span-2 flex-col items-center px-4 md:items-start  ">
       <Link href="/">
         <Image
           alt="Hitokoto"

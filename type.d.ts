@@ -1,11 +1,5 @@
 export type TFetchMode = "init" | "next" | "update" | "refresh";
 
-export type TFetchQuery = {
-  mode: TFetchMode;
-  begin: string;
-  end: string;
-};
-
 export type TTweetBody = {
   text: string;
   username: string;

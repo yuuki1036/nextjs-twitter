@@ -1,5 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { TAddRetweetRequest } from "type";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { fetchSanity } from "lib/fetchSanity";
 
 type Data = {
