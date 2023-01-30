@@ -9,9 +9,9 @@ const MobileMenuRow: FC<Props> = ({ Icon, onClick }) => {
   return (
     <div
       onClick={() => onClick?.()}
-      className="w-[1.6rem] h-[1.6rem] flex items-center justify-center hover:bg-gray-200 rounded-full"
+      className="w-[2.3rem] h-[2.3rem] flex items-center justify-center hover:bg-gray-200 rounded-full"
     >
-      <Icon className="w-7 h-7" />
+      <Icon className="w-[1.6rem] h-[1.6rem]" />
     </div>
   );
 };

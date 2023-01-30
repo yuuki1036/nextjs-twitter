@@ -12,6 +12,7 @@ import Image from "next/image";
 import logo from "public/logo.png";
 import InfiniteScroll from "react-infinite-scroller";
 import { RotatingLines } from "react-loader-spinner";
+import Link from "next/link";
 
 type Props = {
   tweets: TTweet[];
@@ -87,7 +88,7 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
       <CommentModalContext.Provider
         value={{ selectedTweet, handleOpen, handleClose }}
       >
-        <div className="col-span-9 md:col-span-7 lg:col-span-5 border-x max-h-[calc(100vh-3.2rem)] md:max-h-screen overflow-scroll scrollbar-hide">
+        <div className="col-span-9 md:col-span-7 lg:col-span-5 border-x max-h-[calc(100vh-3.1rem)] md:max-h-screen overflow-scroll scrollbar-hide">
           <InfiniteScroll
             loadMore={fetchNext}
             hasMore={hasMore}
@@ -102,15 +103,17 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
             }
           >
             {/* top sticky area */}
-            <div className="sticky top-0 z-10 px-4 md:px-5 py-3 md:py-4 backdrop-blur-sm bg-white/80 flex items-center justify-between border-y border-gray-100">
+            <div className="md:sticky md:top-0 z-10 px-4 md:px-5 py-3 md:py-4 backdrop-blur-sm bg-white/80 flex items-center justify-between border-y border-gray-100">
               <h1 className="text-xl font-bold hidden md:block">Home</h1>
-              <Image
-                alt="ひとこと"
-                src={logo}
-                width={40}
-                height={40}
-                className="w-7 h-7 md:hidden"
-              />
+              <Link href="/">
+                <Image
+                  alt="ひとこと"
+                  src={logo}
+                  width={40}
+                  height={40}
+                  className="w-7 h-7 md:hidden cursor-pointer"
+                />
+              </Link>
               <ArrowPathIcon
                 onClick={handleRefresh}
                 className="mr-3 w-7 h-7 md:w-8 md:h-8 cursor-pointer text-twitter transition-all duration-500 ease-out hover:rotate-180 active:scale-125"
