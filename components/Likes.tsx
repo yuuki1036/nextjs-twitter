@@ -19,6 +19,7 @@ const Likes: FC<Props> = ({ tweet }) => {
   const [liked, setLiked] = useState<boolean>(
     !!session && tweet.likes.includes(session?.user?.name || "")
   );
+
   useEffect(() => {
     setCount(tweet.likesCount);
   }, [tweet.likesCount]);

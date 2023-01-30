@@ -58,7 +58,7 @@ const Tweet: FC<Props> = ({ tweet }) => {
             {tweet.image && (
               <picture>
                 <img
-                  className="mt-3 ml-0 mb-2 max-h-60 rounded-lg object-cover shadow-sm"
+                  className="mt-3 ml-0 mb-2 w-full rounded-lg object-cover shadow-sm"
                   src={tweet.image}
                   alt="tweet image"
                 />
@@ -67,7 +67,7 @@ const Tweet: FC<Props> = ({ tweet }) => {
           </div>
         </div>
         {/* tweet status */}
-        <div className="flex justify-between pl-[3.2rem] md:pl-0">
+        <div className="flex justify-between pl-[3.2rem] md:pr-[4.5rem]">
           <Comments tweet={tweet} />
           <Retweets tweet={tweet} />
           <Likes tweet={tweet} />
