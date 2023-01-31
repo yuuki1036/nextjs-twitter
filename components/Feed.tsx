@@ -88,7 +88,7 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
       <CommentModalContext.Provider
         value={{ selectedTweet, handleOpen, handleClose }}
       >
-        <div className="col-span-9 md:col-span-7 lg:col-span-5 border-x max-h-[calc(100vh-3.1rem)] md:max-h-screen overflow-scroll scrollbar-hide">
+        <div className="col-span-9 md:col-span-8 lg:col-span-5 border-x h-screen overflow-y-scroll scrollbar-hide">
           <InfiniteScroll
             loadMore={fetchNext}
             hasMore={hasMore}
@@ -103,7 +103,7 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
             }
           >
             {/* top sticky area */}
-            <div className="md:sticky md:top-0 z-10 px-4 md:px-5 py-3 md:py-4 backdrop-blur-sm bg-white/80 flex items-center justify-between border-y border-gray-100">
+            <div className="sticky top-0 z-10 px-4 md:px-5 py-3 md:py-4 backdrop-blur-sm bg-white/80 flex items-center justify-between border-y border-gray-100">
               <h1 className="text-xl font-bold hidden md:block">Home</h1>
               <Link href="/">
                 <Image

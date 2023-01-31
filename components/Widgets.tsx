@@ -4,7 +4,7 @@ import { TwitterTimelineEmbed } from "react-twitter-embed";
 
 const Widgets: FC = () => {
   return (
-    <div className="col-span-2 pl-5 pr-3 mt-4 hidden lg:inline">
+    <div className="col-span-3 pl-5 pr-3 mt-4 hidden lg:inline">
       <div className="flex items-center space-x-2 rounded-xl bg-gray-100 px-3 py-2">
         <MagnifyingGlassIcon className="h-5 w-5 mt-[0.15rem] text-gray-400" />
         <input

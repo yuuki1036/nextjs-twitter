@@ -12,7 +12,7 @@ type Props = {
 const Wrapper: FC<Props> = ({ tweets }) => {
   return (
     <>
-      <div className="grid grid-cols-9 h-[calc(100vh-3.1rem)] md:h-screen">
+      <div className="grid grid-cols-9 h-screen">
         <Sidebar />
         <Feed tweets={tweets} />
         <Widgets />

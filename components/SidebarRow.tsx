@@ -1,25 +1,26 @@
 import { FC, SVGProps } from "react";
+import cn from "classnames";
 
 type Props = {
   Icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
-  title: string;
+  disabled?: boolean;
   onClick?: () => {};
 };
 
-const SidebarRow: FC<Props> = ({ Icon, title, onClick }) => {
+const SidebarRow: FC<Props> = ({ Icon, disabled = true, onClick }) => {
   return (
     <div
       onClick={() => {
         onClick?.();
       }}
-      className="group md:w-full"
+      className={cn(
+        "flex items-center justify-center p-3 rounded-full transition-all duration-200",
+        { "cursor-pointer": !disabled, "hover:bg-gray-100": !disabled }
+      )}
     >
-      <div className="flex max-w-fit cursor-pointer items-center space-x-2 px-4 py-3 rounded-full group-hover:bg-gray-100 transition-all duration-200 ">
-        <Icon className="w-5 h-5 lg:w-6 lg:h-6" />
-        <p className="hidden group-hover:text-twitter md:inline-flex text-base font-light lg:text-xl text-ellipsis overflow-hidden">
-          {title}
-        </p>
-      </div>
+      <Icon
+        className={cn("w-[1.6rem] h-[1.6rem]", { "text-gray-400": disabled })}
+      />
     </div>
   );
 };

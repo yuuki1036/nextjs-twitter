@@ -1,28 +1,21 @@
 import { FC } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
-import Link from "next/link";
-import MobileMenuRow from "./MobileMenuRow";
-import {
-  HomeIcon,
-  MagnifyingGlassIcon,
-  BellIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
+import { GUEST_IMAGE_PATH } from "lib/constants";
 
 const MobileMenu: FC = () => {
   const { data: session } = useSession();
+  const userImage = session?.user?.image || GUEST_IMAGE_PATH;
 
   return (
-    <div className="fixed bottom-0 z-50 w-screen h-[3.1rem] bg-white md:hidden">
-      <hr className="bg-gray-50" />
-      <div className="h-full flex items-center justify-between px-6">
-        <Link href="/">
-          <MobileMenuRow Icon={HomeIcon} />
-        </Link>
-        <MobileMenuRow Icon={MagnifyingGlassIcon} />
-        <MobileMenuRow Icon={BellIcon} />
-        <MobileMenuRow Icon={UserIcon} onClick={session ? signOut : signIn} />
-      </div>
+    <div className="fixed bottom-5 right-4 z-50 md:hidden">
+      <picture>
+        <img
+          onClick={() => (session ? signOut() : signIn())}
+          className="w-[3.2rem] h-[3.2rem] rounded-full border-gray-300 border-2 cursor-pointer"
+          src={userImage}
+          alt="user image"
+        />
+      </picture>
     </div>
   );
 };
