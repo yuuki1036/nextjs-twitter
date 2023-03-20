@@ -1,1 +1,1 @@
-# Twitter Clone With Nextjs, TypeScript and Sanity
+# Twitter Clone With NextJS, TypeScript and Sanity
