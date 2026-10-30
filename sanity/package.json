@@ -15,11 +15,11 @@
     "sanity"
   ],
   "dependencies": {
-    "@sanity/vision": "^3.99.0",
+    "@sanity/vision": "^4.22.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
-    "sanity": "^3.99.0",
+    "sanity": "^4.22.1",
     "styled-components": "^6.1.15"
   },
   "devDependencies": {
@@ -36,6 +36,8 @@
   },
   "resolutions": {
     "@sanity/uuid": "^3.0.3",
-    "**/prismjs": "^1.30.0"
+    "**/prismjs": "^1.30.0",
+    "adm-zip": "^0.6.1",
+    "zod": "^4.6.6"
   }
 }
