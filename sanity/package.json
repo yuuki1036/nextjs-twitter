@@ -38,6 +38,9 @@
     "@sanity/uuid": "^3.0.3",
     "**/prismjs": "^1.30.0",
     "adm-zip": "^0.6.1",
-    "zod": "^4.6.6"
+    "zod": "^4.6.6",
+    "**/archiver-utils/glob": "^14.0.2",
+    "**/sanity/rimraf/glob": "^14.0.2",
+    "**/@sanity/import/rimraf/glob": "^14.0.2"
   }
 }
