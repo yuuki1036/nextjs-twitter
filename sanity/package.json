@@ -23,8 +23,6 @@
     "styled-components": "^6.1.15"
   },
   "devDependencies": {
-    "@sanity/eslint-config-studio": "^2.0.1",
-    "eslint": "^8.6.0",
     "prettier": "^2.8.3",
     "typescript": "^4.0.0"
   },
@@ -41,6 +39,7 @@
     "zod": "^4.6.6",
     "**/archiver-utils/glob": "^14.0.2",
     "**/sanity/rimraf/glob": "^14.0.2",
-    "**/@sanity/import/rimraf/glob": "^14.0.2"
+    "**/@sanity/import/rimraf/glob": "^14.0.2",
+    "minimatch": "^11.0.1"
   }
 }
