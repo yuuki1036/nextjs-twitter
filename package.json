@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "oxlint"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.13",
@@ -31,8 +31,7 @@
     "@types/react-infinite-scroller": "^1.2.3",
     "@types/react-timeago": "^4.1.3",
     "autoprefixer": "^10.4.13",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "15.5.28",
+    "oxlint": "^1.90.0",
     "postcss": "^8.4.21",
     "postcss-100vh-fix": "^1.0.2",
     "react-infinite-scroller": "^1.2.6",
