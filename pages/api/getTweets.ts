@@ -1,6 +1,6 @@
 import { TFetchMode, TTweet } from "type";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { client } from "sanity";
+import { client } from "lib/sanityClient";
 import groq from "groq";
 
 const initQuery = groq`
