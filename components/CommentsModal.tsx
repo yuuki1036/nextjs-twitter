@@ -105,10 +105,9 @@ const CommentsModal: FC = () => {
                   ) : (
                     <span className="mr-1"></span>
                   )}
-                  <ReactTimeago
-                    className="text-sm text-gray-500"
-                    date={tweet._createdAt}
-                  />
+                  <span className="text-sm text-gray-500">
+                    <ReactTimeago date={tweet._createdAt} />
+                  </span>
                 </div>
 
                 <p className="mb-7 whitespace-pre-wrap">{`${tweet.text}`}</p>
@@ -177,10 +176,9 @@ const CommentsModal: FC = () => {
                             ) : (
                               <span className="mr-1"></span>
                             )}
-                            <ReactTimeago
-                              className="text-sm text-gray-500"
-                              date={comment._createdAt}
-                            />
+                            <span className="text-sm text-gray-500">
+                              <ReactTimeago date={comment._createdAt} />
+                            </span>
                           </div>
                           <p className="mb-7 whitespace-pre-wrap">{`${comment.comment}`}</p>
                         </div>

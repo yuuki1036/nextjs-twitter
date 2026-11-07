@@ -1,7 +1,7 @@
 import { TFetchMode, TTweet } from "type";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { client } from "sanity";
-import { groq } from "next-sanity";
+import { client } from "lib/sanityClient";
+import groq from "groq";
 
 const initQuery = groq`
 *[_type == 'tweet' && !blockTweet && _createdAt <= $latest] | order(_createdAt desc) [0...10] {
