@@ -1,7 +1,7 @@
 import { TComment } from "type";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { client } from "sanity";
-import { groq } from "next-sanity";
+import groq from "groq";
 
 const commentQuery = groq`
   *[_type == 'comment' && references(*[_type == 'tweet' && _id == $tweetId]._id)] {

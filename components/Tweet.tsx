@@ -47,10 +47,9 @@ const Tweet: FC<Props> = ({ tweet }) => {
               ) : (
                 <span className="mr-1"></span>
               )}
-              <ReactTimeago
-                className="text-sm text-gray-500"
-                date={tweet._createdAt}
-              />
+              <span className="text-sm text-gray-500">
+                <ReactTimeago date={tweet._createdAt} />
+              </span>
             </div>
             {/* tweet text */}
             <p className="mb-2 whitespace-pre-wrap">{`${tweet.text}`}</p>
