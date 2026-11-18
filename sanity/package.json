@@ -15,11 +15,11 @@
     "sanity"
   ],
   "dependencies": {
-    "@sanity/vision": "^5.31.2",
+    "@sanity/vision": "^6.24.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-is": "^19.3.1",
-    "sanity": "^5.31.2",
+    "sanity": "^6.24.0",
     "styled-components": "^6.1.15"
   },
   "devDependencies": {
@@ -33,15 +33,8 @@
     "singleQuote": true
   },
   "resolutions": {
-    "@sanity/uuid": "^3.0.3",
-    "**/prismjs": "^1.30.0",
-    "adm-zip": "^0.6.1",
-    "zod": "^4.6.6",
-    "**/archiver-utils/glob": "^14.0.2",
-    "**/sanity/rimraf/glob": "^14.0.2",
-    "**/@sanity/import/rimraf/glob": "^14.0.2",
-    "minimatch": "^11.0.1",
+    "**/@oclif/core/minimatch": "^11.0.1",
     "**/@vercel/frameworks/js-yaml": "3.15.2",
-    "**/typeid-js/uuid": "^11.1.1"
+    "**/@vercel/frameworks/smol-toml": "^1.9.0"
   }
 }
