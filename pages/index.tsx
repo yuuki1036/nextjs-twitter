@@ -2,7 +2,7 @@ import { TTweet } from "type";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
-import { fetchTweets } from "utils/fetchTweets";
+import { getTweets } from "lib/getTweets";
 import { Toaster } from "react-hot-toast";
 import Wrapper from "components/Wrapper";
 
@@ -33,8 +33,12 @@ const Home: NextPage<Props> = ({ tweets }) => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  // initial fetch
-  const { tweets } = await fetchTweets();
+  // initial fetch（server 側なので API を経由せず Sanity を直接引く）
+  const tweets = await getTweets({
+    mode: "init",
+    latest: new Date().toISOString(),
+    oldest: "",
+  });
   return {
     props: {
       tweets,

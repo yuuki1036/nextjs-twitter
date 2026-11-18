@@ -12,7 +12,7 @@ export const fetchTweets = async (
   const oldest = length > 0 ? tweets[length - 1]._createdAt : "";
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/getTweets?mode=${mode}&latest=${latest}&oldest=${oldest}`
+    `/api/getTweets?mode=${mode}&latest=${latest}&oldest=${oldest}`
   );
   const data = await res.json();
   const _tweets: TTweet[] = data.tweets;

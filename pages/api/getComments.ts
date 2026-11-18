@@ -1,14 +1,6 @@
 import { TComment } from "type";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { client } from "lib/sanityClient";
-import groq from "groq";
-
-const commentQuery = groq`
-  *[_type == 'comment' && references(*[_type == 'tweet' && _id == $tweetId]._id)] {
-  _id,
-  ...
-  } | order(_createdAt desc)
-`;
+import { getComments } from "lib/getComments";
 
 type Data = {
   comments: TComment[];
@@ -18,7 +10,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const { tweetId } = req.query;
-  const comments: TComment[] = await client.fetch(commentQuery, { tweetId });
+  const { tweetId } = req.query as { tweetId: string };
+  const comments = await getComments(tweetId);
   res.status(200).json({ comments });
 }
