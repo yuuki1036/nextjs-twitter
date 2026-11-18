@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useRef, useState } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { TFetchMode, TTweet } from "type";
 import { CommentModalContext, FetchTweetContext } from "contexts/contexts";
@@ -10,9 +10,9 @@ import { toast } from "react-hot-toast";
 import { Flipper } from "react-flip-toolkit";
 import Image from "next/image";
 import logo from "public/logo.png";
-import InfiniteScroll from "react-infinite-scroller";
 import { RotatingLines } from "react-loader-spinner";
 import Link from "next/link";
+import { useInfiniteScroll } from "utils/useInfiniteScroll";
 
 type Props = {
   tweets: TTweet[];
@@ -72,6 +72,16 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
     return Promise.resolve();
   };
 
+  // infinite scroll: 一覧の末尾が見えたら次を読む
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  useInfiniteScroll({
+    rootRef: scrollRef,
+    sentinelRef,
+    hasMore,
+    loadMore: fetchNext,
+  });
+
   const handleRefresh = async () => {
     const promise = fetchRefresh();
     toast.promise(promise, {
@@ -88,20 +98,11 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
       <CommentModalContext.Provider
         value={{ selectedTweet, handleOpen, handleClose }}
       >
-        <div className="col-span-9 md:col-span-8 lg:col-span-5 border-x h-screen overflow-y-scroll scrollbar-hide">
-          <InfiniteScroll
-            loadMore={fetchNext}
-            hasMore={hasMore}
-            useWindow={false}
-            loader={
-              <div
-                key={0}
-                className="w-full h-20 flex items-center justify-center"
-              >
-                <RotatingLines strokeColor="#00ADED" width="40" />
-              </div>
-            }
-          >
+        <div
+          ref={scrollRef}
+          className="col-span-9 md:col-span-8 lg:col-span-5 border-x h-screen overflow-y-scroll scrollbar-hide"
+        >
+          <div>
             {/* top sticky area */}
             <div className="sticky top-0 z-10 px-4 md:px-5 py-3 md:py-4 backdrop-blur-sm bg-white/80 flex items-center justify-between border-y border-gray-100">
               <h1 className="text-xl font-bold hidden md:block">Home</h1>
@@ -131,7 +132,16 @@ const Feed: FC<Props> = ({ tweets: tweetsProp }) => {
                 ))}
               </Flipper>
             </div>
-          </InfiniteScroll>
+            {/* loader: 見えたら次を読む */}
+            {hasMore && (
+              <div
+                ref={sentinelRef}
+                className="w-full h-20 flex items-center justify-center"
+              >
+                <RotatingLines strokeColor="#00ADED" width="40" />
+              </div>
+            )}
+          </div>
         </div>
         {/* comment modal window */}
         {modalOpen && <CommentsModal />}
